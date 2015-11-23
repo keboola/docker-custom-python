@@ -5,7 +5,7 @@ ENV APP_CUSTOM_VERSION 1.0.0
 
 # setup the environment
 WORKDIR /tmp
-RUN pip install \
+RUN pip install --no-cache-dir \
 		PyYaml \
 		httplib2 \
 		MechanicalSoup
