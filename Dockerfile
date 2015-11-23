@@ -8,7 +8,7 @@ WORKDIR /tmp
 RUN pip install \
 		PyYaml \
 		httplib2 \
-		mechanize
+		MechanicalSoup
 
 # prepare the container
 WORKDIR /home
