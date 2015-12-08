@@ -10,6 +10,8 @@ RUN pip install --no-cache-dir \
 		httplib2 \
 		MechanicalSoup
 
+RUN pip install git+git://github.com/keboola/python-docker-application.git
+
 # prepare the container
 WORKDIR /home
 
