@@ -1,7 +1,4 @@
 FROM quay.io/keboola/base-python
-MAINTAINER Ondrej Popelka <ondrej.popelka@keboola.com>
-
-ENV APP_CUSTOM_VERSION 1.0.0
 
 # setup the environment
 WORKDIR /tmp
@@ -10,7 +7,7 @@ RUN pip install --no-cache-dir \
 		httplib2 \
 		MechanicalSoup
 
-RUN pip install git+git://github.com/keboola/python-docker-application.git
+RUN pip install --upgrade git+git://github.com/keboola/python-docker-application.git
 
 # prepare the container
 WORKDIR /home
