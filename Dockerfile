@@ -5,7 +5,8 @@ WORKDIR /tmp
 RUN pip install --no-cache-dir \
 		PyYaml \
 		httplib2 \
-		MechanicalSoup
+		MechanicalSoup \
+		pymongo 
 
 RUN pip install --upgrade git+git://github.com/keboola/python-docker-application.git
 
