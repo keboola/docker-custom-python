@@ -1,4 +1,4 @@
-FROM quay.io/keboola/base-python
+FROM quay.io/keboola/base-python:3.5.1
 
 # setup the environment
 WORKDIR /tmp
