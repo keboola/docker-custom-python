@@ -27,7 +27,7 @@ RUN pip install --no-cache-dir --ignore-installed --cert=/tmp/cacert.pem \
 		ipython \
 		numpy \
 		matplotlib \
-	&& pip install --upgrade --no-cache-dir --ignore-installed --cert=/tmp/cacert.pem git+git://github.com/keboola/python-docker-application.git@1.0.0
+	&& pip install --upgrade --no-cache-dir --ignore-installed --cert=/tmp/cacert.pem git+git://github.com/keboola/python-docker-application.git@1.0.1
 
 # prepare the container
 WORKDIR /home
