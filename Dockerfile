@@ -22,11 +22,13 @@ RUN yum -y update \
 RUN pip install --no-cache-dir --ignore-installed --cert=/tmp/cacert.pem \
 		httplib2 \
 		ipython \
+		flake8 \
 		matplotlib \
 		numpy \
 		pandas \
 		pymongo \
 		PyYaml \
+		pytest \
 	&& pip install --upgrade --no-cache-dir --ignore-installed --cert=/tmp/cacert.pem git+git://github.com/keboola/python-docker-application.git@1.2.0
 
 # prepare the container
