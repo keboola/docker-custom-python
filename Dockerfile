@@ -1,4 +1,4 @@
-FROM quay.io/keboola/base-python:3.5.1-f
+FROM quay.io/keboola/base-python:3.5.1-g
 
 WORKDIR /home
 
