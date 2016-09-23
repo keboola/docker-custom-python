@@ -1,25 +1,24 @@
-FROM quay.io/keboola/base-python:3.5.1-g
+FROM quay.io/keboola/base-python:3.5.2-b
 
 WORKDIR /home
 
-RUN yum -y update \
-	&& yum -y install \
-		numpy \
-		scipy \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
+		python-numpy \
+		python-scipy \
 		python-matplotlib \
 		ipython \
 		python-pandas \
-		sympy \
+		python-sympy \
 		python-nose \
-		libpng \
-		libpng-devel \
-		freetype2 \ 
-		freetype-devel \
-		gcc-c++ \
-	&& yum clean all
+		libpng12-0 \
+		libpng12-dev \
+		libfreetype6 \ 
+		libfreetype6-dev \
+		g++ \
+	&& rm -rf /var/lib/apt/lists/*
 
 # Install some commonly used packages and the Python application
-RUN pip install --no-cache-dir --ignore-installed --cert=/tmp/cacert.pem \
+RUN pip install --no-cache-dir --ignore-installed \
 		httplib2 \
 		ipython \
 		flake8 \
@@ -29,7 +28,7 @@ RUN pip install --no-cache-dir --ignore-installed --cert=/tmp/cacert.pem \
 		pymongo \
 		PyYaml \
 		pytest \
-	&& pip install --upgrade --no-cache-dir --ignore-installed --cert=/tmp/cacert.pem git+git://github.com/keboola/python-docker-application.git@1.2.0
+	&& pip install --upgrade --no-cache-dir --ignore-installed git+git://github.com/keboola/python-docker-application.git@1.2.0
 
 # prepare the container
 WORKDIR /home
