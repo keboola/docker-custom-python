@@ -3,7 +3,7 @@ language: bash
 services:
   - docker
 before_script:
-  - docker build --tag keboola/base-python .
+  - docker build --tag keboola/docker-custom-python .
 deploy:
   provider: script
   skip_cleanup: true
