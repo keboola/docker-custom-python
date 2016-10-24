@@ -32,3 +32,5 @@ RUN pip install --no-cache-dir --ignore-installed \
 
 # prepare the container
 WORKDIR /home
+
+COPY cacert.pem /tmp/cacert.pem
