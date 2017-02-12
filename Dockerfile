@@ -12,7 +12,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 		python-nose \
 		libpng12-0 \
 		libpng12-dev \
-		libfreetype6 \ 
+		libfreetype6 \
 		libfreetype6-dev \
 		g++ \
 	&& rm -rf /var/lib/apt/lists/*
@@ -28,6 +28,7 @@ RUN pip install --no-cache-dir --ignore-installed \
 		pymongo \
 		PyYaml \
 		pytest \
+		requests \
 	&& pip install --upgrade --no-cache-dir --ignore-installed git+git://github.com/keboola/python-docker-application.git@1.2.0
 
 # prepare the container
