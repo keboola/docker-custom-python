@@ -18,7 +18,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 	&& rm -rf /var/lib/apt/lists/*
 
 # Install some commonly used packages and the Python application
-RUN pip install --no-cache-dir --ignore-installed --secure-host pypi.python.org \
+RUN pip install --no-cache-dir --ignore-installed --trusted-host pypi.python.org \
 		httplib2 \
 		ipython \
 		flake8 \
