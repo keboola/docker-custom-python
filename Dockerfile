@@ -1,8 +1,9 @@
-FROM quay.io/keboola/base-python:3.5.2-b
+FROM python:3.5.3
+ENV PYTHONIOENCODING utf-8
 
 WORKDIR /home
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
 		python-numpy \
 		python-scipy \
 		python-matplotlib \
@@ -18,7 +19,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 	&& rm -rf /var/lib/apt/lists/*
 
 # Install some commonly used packages and the Python application
-RUN pip install --no-cache-dir --ignore-installed \
+RUN pip3 install --no-cache-dir --upgrade --force-reinstall \
 		httplib2 \
 		ipython \
 		flake8 \
@@ -29,7 +30,4 @@ RUN pip install --no-cache-dir --ignore-installed \
 		PyYaml \
 		pytest \
 		requests \
-	&& pip install --upgrade --no-cache-dir --ignore-installed git+git://github.com/keboola/python-docker-application.git@2.0.0
-
-# prepare the container
-WORKDIR /home
+	&& pip3 install --no-cache-dir --upgrade --force-reinstall git+git://github.com/keboola/python-docker-application.git@2.0.0
