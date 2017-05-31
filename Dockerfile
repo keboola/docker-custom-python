@@ -15,6 +15,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 		libpng12-dev \
 		libfreetype6 \
 		libfreetype6-dev \
+		libssl-dev \
+		libgeos-c1 \
 		g++ \
 	&& rm -rf /var/lib/apt/lists/*
 
