@@ -1,4 +1,4 @@
-FROM python:3.5.3
+FROM python:3.6.2
 ENV PYTHONIOENCODING utf-8
 
 WORKDIR /home
@@ -32,4 +32,5 @@ RUN pip3 install --no-cache-dir --upgrade --force-reinstall \
 		PyYaml \
 		pytest \
 		requests \
+		snowflake-connector-python \
 	&& pip3 install --no-cache-dir --upgrade --force-reinstall git+git://github.com/keboola/python-docker-application.git@2.0.0
