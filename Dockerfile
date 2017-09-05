@@ -27,10 +27,13 @@ RUN pip3 install --no-cache-dir --upgrade --force-reinstall \
 		flake8 \
 		matplotlib \
 		numpy \
+		nose \
 		pandas \
 		pymongo \
 		PyYaml \
 		pytest \
 		requests \
 		snowflake-connector-python \
+		scipy \
+		sympy \		
 	&& pip3 install --no-cache-dir --upgrade --force-reinstall git+git://github.com/keboola/python-docker-application.git@2.0.0
