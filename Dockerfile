@@ -35,5 +35,6 @@ RUN pip3 install --no-cache-dir --upgrade --force-reinstall \
 		requests \
 		snowflake-connector-python \
 		scipy \
+		scikit-learn \
 		sympy \		
 	&& pip3 install --no-cache-dir --upgrade --force-reinstall git+git://github.com/keboola/python-docker-application.git@2.0.0
