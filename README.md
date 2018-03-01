@@ -1,2 +1,2 @@
 # Keboola Docker Custom Python
-Base image for Custom Python applications. See [documentation](https://developers.keboola.com/extend/custom-science/python/) for more details about building custom science extensions.
+Base image for Python components. See [documentation](https://developers.keboola.com/extend/) for more details about building components for KBC.
