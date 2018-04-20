@@ -1,4 +1,4 @@
-FROM python:3.6.4
+FROM python:3.6.5
 ENV PYTHONIOENCODING utf-8
 
 WORKDIR /home
@@ -22,6 +22,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Install some commonly used packages and the Python application
 RUN pip3 install --no-cache-dir --upgrade --force-reinstall \
+		python-dateutil==2.6.1 \
 		httplib2 \
 		ipython \
 		flake8 \
