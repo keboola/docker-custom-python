@@ -1,4 +1,4 @@
-FROM python:3.7.1
+FROM python:3.7.2
 ENV PYTHONIOENCODING utf-8
 
 WORKDIR /home
