@@ -31,6 +31,7 @@ RUN pip3 install --no-cache-dir --upgrade --force-reinstall \
         snowflake-connector-python \
         scipy \
         scikit-learn \
-        sympy \     
+        sympy \
+        tqdm \
     && pip3 install --no-cache-dir --upgrade --force-reinstall git+git://github.com/keboola/python-docker-application.git@2.1.1 \
     && mkdir -p /root/.cache/snowflake/
