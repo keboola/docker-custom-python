@@ -34,4 +34,5 @@ RUN pip3 install --no-cache-dir --upgrade --force-reinstall \
         sympy \
         tqdm \
     && pip3 install --no-cache-dir --upgrade --force-reinstall git+git://github.com/keboola/python-docker-application.git@2.1.1 \
+    && pip3 install --no-cache-dir git+git://github.com/keboola/sapi-python-client.git@0.1.3 \
     && mkdir -p /root/.cache/snowflake/
