@@ -34,7 +34,7 @@ RUN pip3 install --no-cache-dir --upgrade --force-reinstall \
         matplotlib \
         numpy \
         nose \
-        pandas \
+        pandas\<1.0\
         pymongo \
         PyYaml \
         pytest \
