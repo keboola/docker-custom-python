@@ -13,6 +13,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         python-sympy \
         python-nose \
         g++ \
+        libatlas-base-dev \
+        gfortran \
     && rm -rf /var/lib/apt/lists/*
 
 # From https://jdk.java.net/13/, stolen from https://github.com/docker-library/openjdk/blob/master/8/jdk/Dockerfile#L22
