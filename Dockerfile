@@ -28,25 +28,52 @@ RUN wget https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d8
 
 # Install some commonly used packages and the Python application
 RUN pip3 install --no-cache-dir --upgrade --force-reinstall \
+		beautifulsoup4 \
+		bokeh \
+		cloudpickle \
 		colorama \
+		cython \
+		dill \
         httplib2 \
         ipython \
         flake8 \
         future \
+        h5py \
         matplotlib \
+        mlflow \
+        numba \
+        numexpr \
         numpy \
         nose \
-        pandas\<1.0\
+        pandas\
+        patsy \
         pymongo \
         PyYaml \
         pytest \
+        qgrid \
         requests \
+        seaborn \
         snowflake-connector-python \
         scipy \
         scikit-learn \
+        scikit-image \
+        sqlalchemy \
+        statsmodels \
         sympy \
         tabulate \
         tqdm \
+        vincent \
+        xlrd \
     && pip3 install --no-cache-dir --upgrade --force-reinstall git+git://github.com/keboola/python-docker-application.git@2.1.1 \
     && pip3 install --no-cache-dir --find-links https://h2o-release.s3.amazonaws.com/h2o/latest_stable_Py.html h2o \
     && mkdir -p /root/.cache/snowflake/
+
+
+
+
+
+
+
+
+
+    mlflow
