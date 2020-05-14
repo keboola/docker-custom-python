@@ -45,7 +45,7 @@ RUN pip3 install --no-cache-dir --upgrade --force-reinstall \
         numexpr \
         numpy \
         nose \
-        pandas\
+        pandas\<1.0\
         patsy \
         pymongo \
         PyYaml \
