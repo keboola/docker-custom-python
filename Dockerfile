@@ -26,6 +26,9 @@ RUN wget https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d8
 	&& find "$JAVA_HOME/lib" -name '*.so' -exec dirname '{}' ';' | sort -u > /etc/ld.so.conf.d/docker-openjdk.conf \
 	&& ldconfig
 
+# Lets always use latest pip?
+RUN /usr/local/bin/python -m pip install --upgrade pip
+
 # Install some commonly used packages and the Python application
 RUN pip3 install --no-cache-dir --upgrade --force-reinstall \
 		beautifulsoup4 \
