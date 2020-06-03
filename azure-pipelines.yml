@@ -1,0 +1,18 @@
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - script: docker info
+    displayName: 'Info'
+
+  - script: docker build --tag keboola/docker-custom-python .
+    displayName: 'Build'
+
+  - script: |
+      docker login -u="$(QUAY_USERNAME)" -p="$(QUAY_PASSWORD)" quay.io
+      docker tag $(KBC_APP_REPOSITORY) quay.io/$(KBC_APP_REPOSITORY):$(Build.SourceVersion)
+      docker tag $(KBC_APP_REPOSITORY) quay.io/$(KBC_APP_REPOSITORY):latest
+      docker images
+      docker push quay.io/$(KBC_APP_REPOSITORY):$(Build.SourceVersion)
+      docker push quay.io/$(KBC_APP_REPOSITORY):latest
+    displayName: 'Push to quay.io'
