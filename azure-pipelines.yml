@@ -6,23 +6,41 @@ variables:
     value: ${{ replace(variables['Build.SourceBranch'],'refs/tags/','') }}
   - name: isTagBuild
     value: ${{ startsWith(variables['Build.SourceBranch'],'refs/tags/') }}
+  - name: dockerRegistryServiceConnection
+    value: '85ab7e7c-62ce-49e0-b201-bf56e6f3949e'
+  - name: imageRepository
+    value: 'docker-custom-python'
 
 trigger:
   - refs/tags/*
 
 steps:
-  - script: docker info
-    displayName: 'Info'
+- script: docker info
+  displayName: 'Info'
 
-  - script: docker build --tag keboola/docker-custom-python .
-    displayName: 'Build'
+- task: Docker@2
+  inputs:
+    containerRegistry: 'keboola-4338'
+    repository: 'docker-custom-python'
+    command: 'build'
+    Dockerfile: '**/Dockerfile'
 
-  - script: |
-      docker login -u="$(QUAY_USERNAME)" -p="$(QUAY_PASSWORD)" quay.io
-      docker tag $(KBC_APP_REPOSITORY) quay.io/$(KBC_APP_REPOSITORY):$(imageTag)
-      docker tag $(KBC_APP_REPOSITORY) quay.io/$(KBC_APP_REPOSITORY):latest
-      docker images
-      docker push quay.io/$(KBC_APP_REPOSITORY):$(imageTag)
-      docker push quay.io/$(KBC_APP_REPOSITORY):latest
-    condition: eq(variables['isTagBuild'], 'true')
-    displayName: 'Push latest to quay.io'
+- script: |
+    docker login -u="$(QUAY_USERNAME)" -p="$(QUAY_PASSWORD)" quay.io
+    docker tag $(KBC_APP_REPOSITORY) quay.io/$(KBC_APP_REPOSITORY):$(imageTag)
+    docker tag $(KBC_APP_REPOSITORY) quay.io/$(KBC_APP_REPOSITORY):latest
+    docker images
+    docker push quay.io/$(KBC_APP_REPOSITORY):$(imageTag)
+    docker push quay.io/$(KBC_APP_REPOSITORY):latest
+  condition: eq(variables['isTagBuild'], 'true')
+  displayName: 'Push latest to quay.io'
+
+- task: Docker@2
+  inputs:
+    containerRegistry: 'keboola-4338'
+    repository: 'docker-custom-python'
+    command: 'push'
+    tags: '$(imageTag)'
+  condition: eq(variables['isTagBuild'], 'true')
+  displayName: 'Push latest to ACR'
+  
