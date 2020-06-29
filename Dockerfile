@@ -42,6 +42,7 @@ RUN pip3 install --no-cache-dir --upgrade --force-reinstall \
         flake8 \
         future \
         h5py \
+        idna\<2.10\
         matplotlib \
         mlflow \
         numba \
@@ -54,13 +55,13 @@ RUN pip3 install --no-cache-dir --upgrade --force-reinstall \
         PyYaml \
         pytest \
         qgrid \
-        requests \
+        requests\<2.24.0\
         seaborn \
         snowflake-connector-python \
         scipy \
         scikit-learn \
         scikit-image \
-        sqlalchemy \
+        sqlalchemy\<=1.3.13\
         statsmodels \
         sympy \
         tabulate \
@@ -74,3 +75,5 @@ RUN pip3 install --no-cache-dir --upgrade --force-reinstall \
 # Import matplotlib the first time to build the font cache.
 ENV XDG_CACHE_HOME /home/$NB_USER/.cache/
 RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot"
+
+RUN pip3 check
