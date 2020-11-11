@@ -57,7 +57,7 @@ RUN pip3 install --no-cache-dir --upgrade --force-reinstall \
         qgrid \
         requests\<2.24.0\
         seaborn \
-        snowflake-connector-python \
+        snowflake-connector-python[pandas] \
         scipy \
         scikit-learn \
         scikit-image \
