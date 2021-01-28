@@ -30,7 +30,9 @@ RUN wget https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d8
 RUN /usr/local/bin/python -m pip install --upgrade pip
 
 # Install some commonly used packages and the Python application
-RUN pip3 install --no-cache-dir --upgrade --force-reinstall \
+RUN pip3 install --use-feature=2020-resolver --no-cache-dir --upgrade --force-reinstall \
+		avro \
+		fastavro \
 		beautifulsoup4 \
 		bokeh \
 		cloudpickle \
