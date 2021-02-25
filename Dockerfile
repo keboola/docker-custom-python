@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         g++ \
         libatlas-base-dev \
         gfortran \
+        unixodbc-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # From https://jdk.java.net/13/, stolen from https://github.com/docker-library/openjdk/blob/master/8/jdk/Dockerfile#L22
@@ -54,6 +55,7 @@ RUN pip3 install --use-feature=2020-resolver --no-cache-dir --upgrade --force-re
         pandas\<1.0\
         patsy \
         pymongo \
+        pyodbc \
         PyYaml \
         pytest \
         qgrid \
