@@ -3,12 +3,16 @@ ENV PYTHONIOENCODING utf-8
 
 WORKDIR /home
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+    && curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+    && apt-get update && ACCEPT_EULA=Y apt-get install -y --no-install-recommends \
         libgeos-c1v5 \
         python-numpy \
         python-scipy \
         python-matplotlib \
         ipython \
+        msodbcsql17 \
+        mssql-tools \
         python-pandas \
         python-sympy \
         python-nose \
@@ -17,6 +21,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         gfortran \
         unixodbc-dev \
     && rm -rf /var/lib/apt/lists/*
+
+ENV PATH $PATH:/opt/mssql-tools/bin
 
 # From https://jdk.java.net/13/, stolen from https://github.com/docker-library/openjdk/blob/master/8/jdk/Dockerfile#L22
 ENV JAVA_HOME /usr/local/openjdk
