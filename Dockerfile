@@ -79,7 +79,7 @@ RUN pip3 install --use-feature=2020-resolver --no-cache-dir --upgrade --force-re
         vincent \
         xlrd \
         git+git://github.com/keboola/sapi-python-client.git@0.1.3 \
-    && pip3 install --no-cache-dir --upgrade --force-reinstall git+git://github.com/keboola/python-docker-application.git@2.1.1 \
+    && pip3 install --no-cache-dir --upgrade --force-reinstall git+git://github.com/keboola/python-docker-application.git@2.2.0 \
     && pip3 install --no-cache-dir --find-links https://h2o-release.s3.amazonaws.com/h2o/latest_stable_Py.html h2o \
     && mkdir -p /root/.cache/snowflake/
 
