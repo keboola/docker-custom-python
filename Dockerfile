@@ -37,7 +37,7 @@ RUN wget https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d8
 RUN /usr/local/bin/python -m pip install --upgrade pip
 
 # Install some commonly used packages and the Python application
-RUN pip3 install --use-feature=2020-resolver --no-cache-dir --upgrade --force-reinstall \
+RUN pip3 install --no-cache-dir --upgrade --force-reinstall \
 		avro \
 		fastavro \
 		beautifulsoup4 \
@@ -78,7 +78,7 @@ RUN pip3 install --use-feature=2020-resolver --no-cache-dir --upgrade --force-re
         tqdm \
         vincent \
         xlrd \
-        git+git://github.com/keboola/sapi-python-client.git@0.1.3 \
+        git+git://github.com/keboola/sapi-python-client.git@0.3.2 \
     && pip3 install --no-cache-dir --upgrade --force-reinstall git+git://github.com/keboola/python-docker-application.git@2.2.0 \
     && pip3 install --no-cache-dir --find-links https://h2o-release.s3.amazonaws.com/h2o/latest_stable_Py.html h2o \
     && mkdir -p /root/.cache/snowflake/
