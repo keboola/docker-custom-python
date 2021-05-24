@@ -90,7 +90,7 @@ RUN pip3 install --no-cache-dir --upgrade --force-reinstall git+git://github.com
         boto3\<1.12 \
         idna\<2.10 \
         pytz\<2021.0 \
-        pip install keboola.component \
+        keboola.component \
     && mkdir -p /root/.cache/snowflake/
 
 # Import matplotlib the first time to build the font cache.
