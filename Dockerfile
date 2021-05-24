@@ -65,7 +65,7 @@ RUN pip3 install --use-feature=2020-resolver --no-cache-dir --upgrade --force-re
         PyYaml \
         pytest \
         qgrid \
-        requests\<2.24.0\
+        requests\<2.24.0 \
         seaborn \
         snowflake-connector-python[pandas] \
         scipy \
@@ -77,10 +77,20 @@ RUN pip3 install --use-feature=2020-resolver --no-cache-dir --upgrade --force-re
         tabulate \
         tqdm \
         vincent \
-        xlrd \
-        git+git://github.com/keboola/sapi-python-client.git@0.1.3 \
-    && pip3 install --no-cache-dir --upgrade --force-reinstall git+git://github.com/keboola/python-docker-application.git@2.1.1 \
+        xlrd
+
+RUN pip3 install --no-cache-dir --upgrade --force-reinstall git+git://github.com/keboola/python-docker-application.git@2.2.0 \
     && pip3 install --no-cache-dir --find-links https://h2o-release.s3.amazonaws.com/h2o/latest_stable_Py.html h2o \
+	&& pip3 install --use-feature=2020-resolver --no-cache-dir --upgrade --force-reinstall \
+        git+git://github.com/keboola/sapi-python-client.git@0.4.0 \
+        requests\<2.24.0 \
+        azure-storage-blob\<12.0.0 \ 
+        cffi\<1.14 \
+        cryptography\<3.0.0 \
+        boto3\<1.12 \
+        idna\<2.10 \
+        pytz\<2021.0 \
+        pip install keboola.component \
     && mkdir -p /root/.cache/snowflake/
 
 # Import matplotlib the first time to build the font cache.
