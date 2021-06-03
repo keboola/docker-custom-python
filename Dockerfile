@@ -36,17 +36,16 @@ RUN wget https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d8
     && find "$JAVA_HOME/lib" -name '*.so' -exec dirname '{}' ';' | sort -u > /etc/ld.so.conf.d/docker-openjdk.conf \
     && ldconfig
 
-# Lets always use latest pip?
-RUN /usr/local/bin/python -m pip install --upgrade pip
-
 RUN mkdir /home/default \	
 	&& python3 -m venv $VIRTUAL_ENV \	
     && python3 -m pip install --upgrade pip \
-    && pip3 install --use-feature=2020-resolver --no-cache-dir --upgrade --force-reinstall \
+    && pip3 install --no-cache-dir --upgrade --force-reinstall \
         avro \
+        azure-storage-blob \
         fastavro \
         beautifulsoup4 \
         bokeh \
+        boto3 \
         cloudpickle \
         colorama \
         cython \
@@ -86,7 +85,7 @@ RUN mkdir /home/default \
 
 RUN pip3 install --no-cache-dir --upgrade --force-reinstall git+git://github.com/keboola/python-docker-application.git@2.2.0 \
     && pip3 install --no-cache-dir --find-links https://h2o-release.s3.amazonaws.com/h2o/latest_stable_Py.html h2o \
-    && pip3 install --use-feature=2020-resolver --no-cache-dir --upgrade --force-reinstall \
+    && pip3 install --no-cache-dir --upgrade --force-reinstall \
         git+git://github.com/keboola/sapi-python-client.git@0.4.0 \
         keboola.component \
         chardet\<4 \
@@ -96,7 +95,7 @@ RUN pip3 install --no-cache-dir --upgrade --force-reinstall git+git://github.com
 	&& chmod a+rwx -R /home/default 
 
 # Import matplotlib the first time to build the font cache.
-ENV XDG_CACHE_HOME /home/root/.cache/
+ENV XDG_CACHE_HOME /tmp/
 RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot"
 
 RUN pip3 check
