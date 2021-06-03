@@ -1,4 +1,4 @@
-FROM python:3.8.10
+FROM python:3.9.5
 ENV PYTHONIOENCODING utf-8
 
 WORKDIR /home
@@ -61,7 +61,7 @@ RUN mkdir /home/default \
         numexpr \
         numpy \
         nose \
-        pandas\<1.2 \
+        pandas \
         patsy \
         pymongo \
         pyodbc \
