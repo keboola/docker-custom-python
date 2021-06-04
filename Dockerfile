@@ -63,6 +63,7 @@ RUN mkdir /home/default \
         nose \
         pandas \
         patsy \
+	pyarrow \
         pymongo \
         pyodbc \
         PyYaml \
