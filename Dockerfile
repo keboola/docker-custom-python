@@ -90,8 +90,6 @@ RUN pip3 install --no-cache-dir --upgrade --force-reinstall git+git://github.com
         git+git://github.com/keboola/sapi-python-client.git@0.4.0 \
         keboola.component \
         chardet\<4 \
-        certifi\<2021.0.0 \
-        idna\<3 \
     && mkdir -p /root/.cache/snowflake/ \
 	&& chown :users -R /home/default \
 	&& chmod a+rwx -R /home/default 
@@ -101,3 +99,6 @@ ENV XDG_CACHE_HOME /tmp/
 RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot"
 
 RUN pip3 check
+
+# show me the versions
+RUN pip3 freeze
