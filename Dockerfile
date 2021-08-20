@@ -99,3 +99,6 @@ ENV XDG_CACHE_HOME /tmp/
 RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot"
 
 RUN pip3 check
+
+# show me the versions
+RUN pip3 freeze
