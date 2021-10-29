@@ -53,7 +53,6 @@ RUN mkdir /home/default \
         boto3 \
         cloudpickle \
         colorama \
-        cryptography\<4 \
         cython \
         dill \
         httplib2 \
@@ -98,6 +97,7 @@ RUN pip3 install --no-cache-dir --upgrade --force-reinstall git+git://github.com
         git+git://github.com/keboola/sapi-python-client.git@0.4.0 \
         keboola.component \
         chardet\<4 \
+        cryptography\<4 \
     && mkdir -p /root/.cache/snowflake/ \
 	&& chown :users -R /home/default \
 	&& chmod a+rwx -R /home/default 
