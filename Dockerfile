@@ -44,7 +44,7 @@ RUN wget https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d8
 RUN mkdir /home/default \	
 	&& python3 -m venv $VIRTUAL_ENV \	
     && python3 -m pip install --upgrade pip \
-    && pip3 install --no-cache-dir --upgrade --force-reinstall \
+    && pip3 install --no-cache-dir --upgrade --force-reinstall --use-feature=2020-resolver\
         avro \
         azure-storage-blob \
         fastavro \
