@@ -17,9 +17,14 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
         python-sympy \
         python-nose \
         g++ \
+        libsasl2-dev \
         libatlas-base-dev \
+        libicu-dev \
         gfortran \
         unixodbc-dev \
+        python3-icu \
+        wget \
+        git \
     && rm -rf /var/lib/apt/lists/*
 
 ENV PATH $PATH:/opt/mssql-tools/bin
@@ -57,6 +62,7 @@ RUN mkdir /home/default \
         h5py \
         matplotlib \
         mlflow \
+        nltk \
         numba \
         numexpr \
         numpy \
@@ -80,6 +86,7 @@ RUN mkdir /home/default \
         tabulate \
         tqdm \
         vincent \
+        xgboost \
         xlrd \
 	&& chown :users -R /home/default \
 	&& chmod a+rwx -R /home/default 
