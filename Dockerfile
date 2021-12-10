@@ -52,14 +52,24 @@ RUN mkdir /home/default \
         boto3 \
         cloudpickle \
         colorama \
+        colorlog \
+        console-bundle \
         cython \
+        daipe-core \
+        datalake-bundle \
+        deepdiff \
+        deprecation \
         dill \
         fastavro \
         flake8 \
         future \
         h5py \
         httplib2 \
+        injecta \
         ipython \
+        jupyter-bundle \
+        lineage-bundle \
+        logger-bundle \
         matplotlib \
         mlflow \
         nltk \
@@ -67,23 +77,34 @@ RUN mkdir /home/default \
         numba \
         numexpr \
         numpy \
+        ordered-set \
         pandas \
         patsy \
-	    plotly \
+        plotly \
+        py4j \
+        pycodestyle-magic \
+        pyfony-bundles \
+        pyfony-core \
         pymongo \
         pyodbc \
+        pyspark \
+        pyspark-bundle \
         pytest \
+	    python-box \
+        python-dotenv \
         PyYaml \
         qgrid \
         scikit-image \
         scikit-learn \
         scipy \
         seaborn \
+        simpleeval \
         snowflake-connector-python[pandas] \
         sqlalchemy\
         statsmodels \
         sympy \
         tabulate \
+        tomlkit \
         tqdm \
         vincent \
         xgboost \
