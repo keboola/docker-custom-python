@@ -1,4 +1,4 @@
-FROM python:3.9.5
+FROM python:3.9.9-buster
 ENV PYTHONIOENCODING utf-8
 
 WORKDIR /home
@@ -41,8 +41,8 @@ RUN wget https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d8
     && find "$JAVA_HOME/lib" -name '*.so' -exec dirname '{}' ';' | sort -u > /etc/ld.so.conf.d/docker-openjdk.conf \
     && ldconfig
 
-RUN mkdir /home/default \	
-	&& python3 -m venv $VIRTUAL_ENV \	
+RUN mkdir /home/default \
+	&& python3 -m venv $VIRTUAL_ENV \
     && python3 -m pip install --upgrade pip \
     && pip3 install --no-cache-dir --upgrade --force-reinstall \
         avro \
@@ -89,7 +89,7 @@ RUN mkdir /home/default \
         xgboost \
         xlrd \
 	&& chown :users -R /home/default \
-	&& chmod a+rwx -R /home/default 
+	&& chmod a+rwx -R /home/default
 
 RUN pip3 install --no-cache-dir --upgrade --force-reinstall git+git://github.com/keboola/python-docker-application.git@2.2.0 \
     && pip3 install --no-cache-dir --find-links https://h2o-release.s3.amazonaws.com/h2o/latest_stable_Py.html h2o \
@@ -100,7 +100,7 @@ RUN pip3 install --no-cache-dir --upgrade --force-reinstall git+git://github.com
         cryptography\<4 \
     && mkdir -p /root/.cache/snowflake/ \
 	&& chown :users -R /home/default \
-	&& chmod a+rwx -R /home/default 
+	&& chmod a+rwx -R /home/default
 
 # Import matplotlib the first time to build the font cache.
 ENV XDG_CACHE_HOME /tmp/
