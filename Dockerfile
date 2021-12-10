@@ -47,7 +47,6 @@ RUN mkdir /home/default \
     && pip3 install --no-cache-dir --upgrade --force-reinstall \
         avro \
         azure-storage-blob \
-        fastavro \
         beautifulsoup4 \
         bokeh \
         boto3 \
@@ -55,31 +54,32 @@ RUN mkdir /home/default \
         colorama \
         cython \
         dill \
-        httplib2 \
-        ipython \
+        fastavro \
         flake8 \
         future \
         h5py \
+        httplib2 \
+        ipython \
         matplotlib \
         mlflow \
         nltk \
+        nose \
         numba \
         numexpr \
         numpy \
-        nose \
         pandas \
         patsy \
 	    plotly \
         pymongo \
         pyodbc \
-        PyYaml \
         pytest \
+        PyYaml \
         qgrid \
+        scikit-image \
+        scikit-learn \
+        scipy \
         seaborn \
         snowflake-connector-python[pandas] \
-        scipy \
-        scikit-learn \
-        scikit-image \
         sqlalchemy\
         statsmodels \
         sympy \
