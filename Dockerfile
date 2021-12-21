@@ -1,4 +1,4 @@
-FROM python:3.9.9-buster
+FROM python:3.8.8
 ENV PYTHONIOENCODING utf-8
 
 WORKDIR /home
