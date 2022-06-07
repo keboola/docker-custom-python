@@ -1,4 +1,4 @@
-FROM python:3.10.4
+FROM python:3.10.4-slim-buster
 ENV PYTHONIOENCODING utf-8
 
 WORKDIR /home
@@ -7,15 +7,15 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update && ACCEPT_EULA=Y apt-get install -y --no-install-recommends \
         libgeos-c1v5 \
-        python-numpy \
-        python-scipy \
-        python-matplotlib \
-        ipython \
+        python3-numpy \
+        python3-scipy \
+        python3-matplotlib \
+        python3-ipython \
         msodbcsql17 \
         mssql-tools \
-        python-pandas \
-        python-sympy \
-        python-nose \
+        python3-pandas \
+        python3-sympy \
+        python3-nose \
         g++ \
         libsasl2-dev \
         libatlas-base-dev \
@@ -115,7 +115,7 @@ RUN mkdir /home/default \
 RUN pip3 install --no-cache-dir --upgrade --force-reinstall git+https://github.com/keboola/python-docker-application.git@2.2.0 \
     && pip3 install --no-cache-dir --find-links https://h2o-release.s3.amazonaws.com/h2o/latest_stable_Py.html h2o \
     && pip3 install --no-cache-dir --upgrade --force-reinstall \
-        git+git://github.com/keboola/sapi-python-client.git@0.4.0 \
+        git+https://github.com/keboola/sapi-python-client.git@0.4.0 \
         keboola.component \
         chardet\<4 \
         cryptography\<4 \
