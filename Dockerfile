@@ -106,11 +106,6 @@ RUN mkdir /home/default \
         tabulate \
         tomlkit \
         torch \
-        torch-scatter \
-        torch-sparse \
-        torch-cluster \
-        torch-spline-conv \
-        torch-geometric \
         tqdm \
         vincent \
         xgboost \
@@ -123,6 +118,12 @@ RUN pip3 install --no-cache-dir --upgrade --force-reinstall git+https://github.c
     && pip3 install --no-cache-dir --upgrade --force-reinstall \
         git+https://github.com/keboola/sapi-python-client.git@0.4.0 \
         keboola.component \
+        # additional torch packages
+        torch-scatter \
+        torch-sparse \
+        torch-cluster \
+        torch-spline-conv \
+        torch-geometric \
     && mkdir -p /root/.cache/snowflake/ \
 	&& chown :users -R /home/default \
 	&& chmod a+rwx -R /home/default
