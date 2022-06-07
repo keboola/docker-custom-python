@@ -118,8 +118,8 @@ RUN pip3 install --no-cache-dir --upgrade --force-reinstall git+https://github.c
     && pip3 install --no-cache-dir --upgrade --force-reinstall \
         git+https://github.com/keboola/sapi-python-client.git@0.4.0 \
         keboola.component \
+        cryptography\<37 \
         chardet\<4 \
-        cryptography\<4 \
     && mkdir -p /root/.cache/snowflake/ \
 	&& chown :users -R /home/default \
 	&& chmod a+rwx -R /home/default
