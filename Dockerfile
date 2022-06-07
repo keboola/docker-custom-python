@@ -108,6 +108,7 @@ RUN mkdir /home/default \
         torch \
         tqdm \
         vincent \
+        wheel \
         xgboost \
         xlrd \
 	&& chown :users -R /home/default \
@@ -118,6 +119,7 @@ RUN pip3 install --no-cache-dir --upgrade --force-reinstall git+https://github.c
     && pip3 install --no-cache-dir --upgrade --force-reinstall \
         git+https://github.com/keboola/sapi-python-client.git@0.4.0 \
         keboola.component \
+        cryptography\<37 \
         # additional torch packages
         torch-scatter \
         torch-sparse \
