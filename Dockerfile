@@ -112,7 +112,7 @@ RUN mkdir /home/default \
 	&& chown :users -R /home/default \
 	&& chmod a+rwx -R /home/default
 
-RUN pip3 install --no-cache-dir --upgrade --force-reinstall git+git://github.com/keboola/python-docker-application.git@2.2.0 \
+RUN pip3 install --no-cache-dir --upgrade --force-reinstall git+https://github.com/keboola/python-docker-application.git@2.2.0 \
     && pip3 install --no-cache-dir --find-links https://h2o-release.s3.amazonaws.com/h2o/latest_stable_Py.html h2o \
     && pip3 install --no-cache-dir --upgrade --force-reinstall \
         git+git://github.com/keboola/sapi-python-client.git@0.4.0 \
