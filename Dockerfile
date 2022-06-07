@@ -105,6 +105,12 @@ RUN mkdir /home/default \
         sympy \
         tabulate \
         tomlkit \
+        torch \
+        torch-scatter \
+        torch-sparse \
+        torch-cluster \
+        torch-spline-conv \
+        torch-geometric \
         tqdm \
         vincent \
         xgboost \
