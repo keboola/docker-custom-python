@@ -1,4 +1,4 @@
-FROM python:3.8.8
+FROM python:3.10.4-buster
 ENV PYTHONIOENCODING utf-8
 
 WORKDIR /home
@@ -105,20 +105,21 @@ RUN mkdir /home/default \
         sympy \
         tabulate \
         tomlkit \
+        torch \
         tqdm \
         vincent \
+        wheel \
         xgboost \
         xlrd \
 	&& chown :users -R /home/default \
 	&& chmod a+rwx -R /home/default
 
-RUN pip3 install --no-cache-dir --upgrade --force-reinstall git+git://github.com/keboola/python-docker-application.git@2.2.0 \
+RUN pip3 install --no-cache-dir --upgrade --force-reinstall git+https://github.com/keboola/python-docker-application.git@2.2.0 \
     && pip3 install --no-cache-dir --find-links https://h2o-release.s3.amazonaws.com/h2o/latest_stable_Py.html h2o \
     && pip3 install --no-cache-dir --upgrade --force-reinstall \
-        git+git://github.com/keboola/sapi-python-client.git@0.4.0 \
+        git+https://github.com/keboola/sapi-python-client.git@0.4.0 \
         keboola.component \
-        chardet\<4 \
-        cryptography\<4 \
+        cryptography\<37 \
     && mkdir -p /root/.cache/snowflake/ \
 	&& chown :users -R /home/default \
 	&& chmod a+rwx -R /home/default
