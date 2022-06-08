@@ -120,12 +120,6 @@ RUN pip3 install --no-cache-dir --upgrade --force-reinstall git+https://github.c
         git+https://github.com/keboola/sapi-python-client.git@0.4.0 \
         keboola.component \
         cryptography\<37 \
-        # additional torch packages
-        torch-scatter \
-        torch-sparse \
-        torch-cluster \
-        torch-spline-conv \
-        torch-geometric \
     && mkdir -p /root/.cache/snowflake/ \
 	&& chown :users -R /home/default \
 	&& chmod a+rwx -R /home/default
