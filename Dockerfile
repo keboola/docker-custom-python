@@ -7,15 +7,15 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update && ACCEPT_EULA=Y apt-get install -y --no-install-recommends \
         libgeos-c1v5 \
-        python3-numpy \
-        python3-scipy \
-        python3-matplotlib \
-        python3-ipython \
+        python-numpy \
+        python-scipy \
+        python-matplotlib \
+        python-ipython \
         msodbcsql17 \
         mssql-tools \
-        python3-pandas \
-        python3-sympy \
-        python3-nose \
+        python-pandas \
+        python-sympy \
+        python-nose \
         g++ \
         libsasl2-dev \
         libatlas-base-dev \
