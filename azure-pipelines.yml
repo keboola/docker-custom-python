@@ -31,6 +31,9 @@ steps:
   - script: docker build -t docker-custom-python .
     displayName: Build Docker image
 
+  - script: docker images
+    displayName: List Docker Images
+
   - task: Docker@2
     displayName: Login to ACR
     inputs:
