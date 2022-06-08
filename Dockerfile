@@ -10,7 +10,7 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
         python-numpy \
         python-scipy \
         python-matplotlib \
-        python-ipython \
+        ipython \
         msodbcsql17 \
         mssql-tools \
         python-pandas \
