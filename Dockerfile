@@ -100,6 +100,7 @@ RUN mkdir /home/default \
         seaborn \
         simpleeval \
         snowflake-connector-python[pandas] \
+        snowflake-snowpark-python \
         sqlalchemy\
         statsmodels \
         sympy \
