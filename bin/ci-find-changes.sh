@@ -2,20 +2,21 @@
 set -e
 
 if [ "$#" -lt "1" ]; then
-    echo 'Usage: ci-find-changes.sh <varName>:<path>'
-    echo 'Example: ci-find-changes.sh internalApi:apps/internal-api internalApiPhpClient:libs/internal-api-php-client'
+    echo 'Usage: ci-find-changes.sh <targetBranch> <varName>:<path>'
+    echo 'Example: ci-find-changes.sh main internalApi:apps/internal-api internalApiPhpClient:libs/internal-api-php-client'
     exit
 fi
 
+TARGET_BRANCH=$1
 ALL_CHANGES=
 
-for PROJECT in $@; do
+for PROJECT in ${@:2}; do
   PROJECT_CONFIG=(${PROJECT//:/ })
   PROJECT_VAR_NAME=${PROJECT_CONFIG[0]}
   PROJECT_DIR=${PROJECT_CONFIG[1]}
 
   echo -n "Checking ${PROJECT_DIR} ... "
-  PROJECT_CHANGES_COUNT=$(git diff --name-only origin/main $PROJECT_DIR | wc -l)
+  PROJECT_CHANGES_COUNT=$(git diff --name-only "origin/${TARGET_BRANCH}" "${PROJECT_DIR}" | wc -l)
 
   if [[ $PROJECT_CHANGES_COUNT -eq 0 ]]; then
     echo "no changes"

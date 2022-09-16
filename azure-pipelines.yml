@@ -27,7 +27,7 @@ variables:
 
 steps:
   - script: |
-      ./bin/ci-find-changes.sh \
+      ./bin/ci-find-changes.sh master \
         python-3.8:python-3.8/ \
         python-3.10:python-3.10/ \
         python-snowpark:python-snowpark/
