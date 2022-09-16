@@ -1,3 +1,11 @@
+trigger:
+  branches:
+    include:
+      - '*'
+  tags:
+    include:
+      - '*'
+
 pool:
   vmImage: ubuntu-latest
 
@@ -16,9 +24,6 @@ variables:
     value: docker-python-mlflow
   - name: imageRepository_databricks
     value: docker-python-databricks
-
-trigger:
-  - refs/tags/*
 
 steps:
   - script: |
