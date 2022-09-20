@@ -1,11 +1,21 @@
+pr: none
+trigger:
+  batch: true
+  branches:
+    include:
+      - '*'
+  tags:
+    include:
+      - '*'
+
 pool:
   vmImage: ubuntu-latest
 
 variables:
-  - name: imageTag
-    value: ${{ replace(variables['Build.SourceBranch'],'refs/tags/','') }}
   - name: isTagBuild
     value: ${{ startsWith(variables['Build.SourceBranch'],'refs/tags/') }}
+  - name: imageTag
+    value: ${{ replace(variables['Build.SourceBranch'],'refs/tags/','') }}
   - name: azureContainerRegistryConnection
     value: Keboola ACR
   - name: azureContainerRegistry
@@ -16,24 +26,34 @@ variables:
     value: docker-python-mlflow
   - name: imageRepository_databricks
     value: docker-python-databricks
-
-trigger:
-  - refs/tags/*
+  - name: imageRepository_snowpark
+    value: docker-python-snowpark
 
 steps:
-  - script: docker info
-    displayName: Info
+  - script: |
+      ./bin/ci-find-changes.sh master \
+        python-3.8:python-3.8/ \
+        python-3.10:python-3.10/ \
+        python-snowpark:python-snowpark/
+    displayName: Find changes
+    name: findChanges
 
-  - script: echo '##vso[task.setvariable variable=imageTag]$(Build.BuildId)'
-    displayName: Set the imageTag to buildId if it's not a tag build
-    condition: eq(variables['isTagBuild'], 'false')
+  - script: docker buildx bake --load $(changedProjects)
+    displayName: Build Docker images
 
-  - script: docker build -t docker-custom-python .
-    displayName: Build Docker image
+# Push Quay
+  - script: |
+      set -Eeuo pipefail
+      docker login -u="$(QUAY_USERNAME)" -p="$(QUAY_PASSWORD)" quay.io
+      
+      docker tag keboola/docker-custom-python:python-3.8 quay.io/keboola/$(imageRepository_base):python-3.8-$(imageTag)
+      docker tag keboola/docker-custom-python:python-3.10 quay.io/keboola/$(imageRepository_base):python-3.10-$(imageTag)
+      docker tag keboola/docker-custom-python:python-3.10 quay.io/keboola/$(imageRepository_base):latest
+      docker push -a quay.io/keboola/$(imageRepository_base)
+    displayName: Push images to quay.io
+    condition: eq(variables['isTagBuild'], 'true')
 
-  - script: docker images
-    displayName: List Docker Images
-
+# Push ACR
   - task: Docker@2
     displayName: Login to ACR
     inputs:
@@ -41,47 +61,33 @@ steps:
       containerRegistry: $(azureContainerRegistryConnection)
     condition: eq(variables['isTagBuild'], 'true')
 
-# Push base image
   - script: |
       set -Eeuo pipefail
-      docker login -u="$(QUAY_USERNAME)" -p="$(QUAY_PASSWORD)" quay.io
-      docker tag docker-custom-python quay.io/keboola/$(imageRepository_base):$(imageTag)
-      docker tag docker-custom-python quay.io/keboola/$(imageRepository_base):latest
-      docker push -a quay.io/keboola/$(imageRepository_base)
-    condition: eq(variables['isTagBuild'], 'true')
-    displayName: Push $(imageRepository_base) to quay.io
-
-  - script: |
-      set -Eeuo pipefail
-      docker tag docker-custom-python $(azureContainerRegistry)/$(imageRepository_base):$(imageTag)
+      docker tag keboola/docker-custom-python:python-3.8 $(azureContainerRegistry)/$(imageRepository_base):python-3.8-$(imageTag)
+      docker tag keboola/docker-custom-python:python-3.10 $(azureContainerRegistry)/$(imageRepository_base):python-3.10-$(imageTag)
       docker push -a $(azureContainerRegistry)/$(imageRepository_base)
-    displayName: Push $(imageRepository_base) to ACR
+  
+      docker tag keboola/docker-custom-python:python-3.10 $(azureContainerRegistry)/$(imageRepository_mlflow):$(imageTag)
+      docker push -a $(azureContainerRegistry)/$(imageRepository_mlflow)
+      
+      docker tag keboola/docker-custom-python:python-3.10 $(azureContainerRegistry)/$(imageRepository_databricks):$(imageTag)
+      docker push -a $(azureContainerRegistry)/$(imageRepository_databricks)
+      
+      docker tag keboola/docker-custom-python-snowpark $(azureContainerRegistry)/$(imageRepository_snowpark):$(imageTag)
+      docker push -a $(azureContainerRegistry)/$(imageRepository_snowpark)
+    displayName: Push images to ACR (all)
     condition: eq(variables['isTagBuild'], 'true')
 
-# Push MLFlow
+# Push ECR
   - task: ECRPushImage@1
     inputs:
       awsCredentials: Production - ECR Distribution - MLFlow
       regionName: us-east-1
+      sourceImageName: keboola/docker-custom-python
+      sourceImageTag: python-3.10
       repositoryName: keboola/$(imageRepository_mlflow)
-      sourceImageName: docker-custom-python
       pushTag: $(imageTag)
     displayName: Push $(imageRepository_mlflow) to ECR
-    condition: eq(variables['isTagBuild'], 'true')
-
-  - script: |
-      set -Eeuo pipefail
-      docker tag docker-custom-python $(azureContainerRegistry)/$(imageRepository_mlflow):$(imageTag)
-      docker push -a $(azureContainerRegistry)/$(imageRepository_mlflow)
-    displayName: Push $(imageRepository_mlflow) to ACR
-    condition: eq(variables['isTagBuild'], 'true')
-
-# Push Databricks
-  - script: |
-      set -Eeuo pipefail
-      docker tag docker-custom-python $(azureContainerRegistry)/$(imageRepository_databricks):$(imageTag)
-      docker push -a $(azureContainerRegistry)/$(imageRepository_databricks)
-    displayName: Push $(imageRepository_databricks) to ACR
     condition: eq(variables['isTagBuild'], 'true')
 
 # Publish the latest tag info
