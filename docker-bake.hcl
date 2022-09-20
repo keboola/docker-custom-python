@@ -18,8 +18,8 @@ target "python-310" {
 
 target "python-snowpark" {
   context = "./python-snowpark/"
-  tags = ["keboola/docker-custom-python-snowpark:python-3.8"]
+  tags = ["keboola/docker-custom-python-snowpark"]
   contexts = {
-    python-38 = "target:python-38"
+    python = "target:python-38"
   }
 }
