@@ -1,4 +1,4 @@
-FROM python:3.10.4-buster
+FROM --platform=linux/amd64 python:3.10.10-buster
 ENV PYTHONIOENCODING utf-8
 
 WORKDIR /home
@@ -43,6 +43,7 @@ RUN wget https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d8
 
 RUN mkdir /home/default \
 	&& python3 -m venv $VIRTUAL_ENV \
+	&& . $VIRTUAL_ENV/bin/activate \
     && python3 -m pip install --upgrade pip \
     && pip3 install --no-cache-dir --upgrade --force-reinstall \
         avro \
