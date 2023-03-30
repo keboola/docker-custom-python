@@ -16,6 +16,11 @@ target "python-310" {
   tags = ["keboola/docker-custom-python:python-3.10"]
 }
 
+target "python-311" {
+  context = "./python-3.11/"
+  tags = ["keboola/docker-custom-python:python-3.11"]
+}
+
 target "python-snowpark" {
   context = "./python-snowpark/"
   tags = ["keboola/docker-custom-python-snowpark"]

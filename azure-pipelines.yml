@@ -34,6 +34,7 @@ steps:
       ./bin/ci-find-changes.sh master \
         python-3.8:python-3.8/ \
         python-3.10:python-3.10/ \
+        python-3.11:python-3.11/ \
         python-snowpark:python-snowpark/
     displayName: Find changes
     name: findChanges
