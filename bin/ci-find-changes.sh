@@ -22,7 +22,7 @@ for PROJECT in ${@:2}; do
     echo "no changes"
   else
     echo "has changes"
-    echo "##vso[task.setvariable variable=changedProjects_${PROJECT_VAR_NAME};isOutput=true]1"
+    echo "##vso[task.setvariable variable=changedProjects_${PROJECT_VAR_NAME}]1"
     ALL_CHANGES="${ALL_CHANGES} \"${PROJECT_VAR_NAME}\""
   fi
 done
@@ -33,7 +33,7 @@ if [[ "${ALL_CHANGES}" == "" ]]; then
     PROJECT_CONFIG=(${PROJECT//:/ })
     PROJECT_VAR_NAME=${PROJECT_CONFIG[0]}
 
-    echo "##vso[task.setvariable variable=changedProjects_${PROJECT_VAR_NAME};isOutput=true]1"
+    echo "##vso[task.setvariable variable=changedProjects_${PROJECT_VAR_NAME}]1"
     ALL_CHANGES="${ALL_CHANGES} \"${PROJECT_VAR_NAME}\""
   done
 fi
