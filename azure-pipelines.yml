@@ -35,9 +35,11 @@ steps:
         python-3.8:python-3.8/ \
         python-3.10:python-3.10/ \
         python-snowpark:python-snowpark/
-      docker buildx bake --load $(changedProjects)
     displayName: Find changes
     name: findChanges
+
+  - script: docker buildx bake --load $(findChanges.outputs['changedProjects'])
+    displayName: Build Docker images
 
 # Push Quay
   - script: |
