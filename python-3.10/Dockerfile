@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 python:3.10.10-buster
+FROM python:3.10.10-buster
 ENV PYTHONIOENCODING utf-8
 
 WORKDIR /home
@@ -28,13 +28,20 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && rm -rf /var/lib/apt/lists/*
 
 ENV PATH $PATH:/opt/mssql-tools/bin
+
 # https://pythonspeed.com/articles/activate-virtualenv-dockerfile/
-ENV VIRTUAL_ENV=/home/default
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+ENV VIRTUAL_ENV /home/default
+
+# let's stash the path so the we can use it when we want out of the venv
+ENV _OLD_VIRTUAL_PATH "$PATH"
+
+ENV PATH "$VIRTUAL_ENV/bin:$PATH"
 
 # From https://jdk.java.net/13/, stolen from https://github.com/docker-library/openjdk/blob/master/8/jdk/Dockerfile#L22
 ENV JAVA_HOME /usr/local/openjdk
+
 ENV PATH $JAVA_HOME/bin:$PATH
+
 RUN wget https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz \
     && mkdir $JAVA_HOME \
     && tar xv --file openjdk-13*_bin.tar.gz --directory "$JAVA_HOME" --no-same-owner --strip-components 1 \
@@ -43,7 +50,6 @@ RUN wget https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d8
 
 RUN mkdir /home/default \
 	&& python3 -m venv $VIRTUAL_ENV \
-	&& . $VIRTUAL_ENV/bin/activate \
     && python3 -m pip install --upgrade pip \
     && pip3 install --no-cache-dir --upgrade --force-reinstall \
         avro \
@@ -82,6 +88,7 @@ RUN mkdir /home/default \
         pandas \
         patsy \
         plotly \
+        prophet \
         py4j \
         pycodestyle-magic \
         pyfony-bundles \
