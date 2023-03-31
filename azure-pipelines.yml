@@ -28,20 +28,20 @@ variables:
     value: docker-python-databricks
   - name: imageRepository_snowpark
     value: docker-python-snowpark
-  - name: changedProjects_python-38
+  - name: changedProjects_python38
     value: 0
-  - name: changedProjects_python-310
+  - name: changedProjects_python310
     value: 0
-  - name: changedProjects_python-snowpark
+  - name: changedProjects_pythonSnowpark
     value: 0
 
 
 steps:
   - script: |
       ./bin/ci-find-changes.sh master \
-        python-38:python-3.8/ \
-        python-310:python-3.10/ \
-        python-snowpark:python-snowpark/
+        python38:python-3.8/ \
+        python310:python-3.10/ \
+        pythonSnowpark:python-snowpark/
     displayName: Find changes
     name: findChanges
 
@@ -55,7 +55,7 @@ steps:
       docker tag keboola/docker-custom-python:python-3.8 quay.io/keboola/$(imageRepository_base):python-3.8-$(imageTag)
       docker push -a quay.io/keboola/$(imageRepository_base)
     displayName: Push 3.8 image to quay.io
-    condition: and(eq(variables['isTagBuild'], 'true'), eq(variables["changedProjects_python-38"], 1))
+    condition: and(eq(variables['isTagBuild'], 'true'), eq(variables["changedProjects_python38"], 1))
 
   - script: |
       set -Eeuo pipefail
@@ -64,7 +64,7 @@ steps:
       docker tag keboola/docker-custom-python:python-3.10 quay.io/keboola/$(imageRepository_base):latest
       docker push -a quay.io/keboola/$(imageRepository_base)
     displayName: Push 3.8 image to quay.io
-    condition: and(eq(variables['isTagBuild'], 'true'), eq(variables["changedProjects_python-310"], 1))
+    condition: and(eq(variables['isTagBuild'], 'true'), eq(variables["changedProjects_python310"], 1))
 
 # Push ACR
   - task: Docker@2
@@ -79,7 +79,7 @@ steps:
       docker tag keboola/docker-custom-python:python-3.8 $(azureContainerRegistry)/$(imageRepository_base):python-3.8-$(imageTag)
       docker push -a $(azureContainerRegistry)/$(imageRepository_base)
     displayName: Push 3.8 image to ACR
-    condition: and(eq(variables['isTagBuild'], 'true'), eq(variables["changedProjects_python-38"], 1))
+    condition: and(eq(variables['isTagBuild'], 'true'), eq(variables["changedProjects_python38"], 1))
 
   - script: |
       set -Eeuo pipefail
@@ -92,14 +92,14 @@ steps:
       docker tag keboola/docker-custom-python:python-3.10 $(azureContainerRegistry)/$(imageRepository_databricks):$(imageTag)
       docker push -a $(azureContainerRegistry)/$(imageRepository_databricks)
     displayName: Push 3.10 images to ACR
-    condition: and(eq(variables['isTagBuild'], 'true'), eq(variables["changedProjects_python-310"], 1))
+    condition: and(eq(variables['isTagBuild'], 'true'), eq(variables["changedProjects_python310"], 1))
 
   - script: |
       set -Eeuo pipefail
       docker tag keboola/docker-custom-python-snowpark $(azureContainerRegistry)/$(imageRepository_snowpark):$(imageTag)
       docker push -a $(azureContainerRegistry)/$(imageRepository_snowpark)
     displayName: Push python-snowpark image to ACR
-    condition: and(eq(variables['isTagBuild'], 'true'), eq(variables["changedProjects_python-snowpark"], 1))
+    condition: and(eq(variables['isTagBuild'], 'true'), eq(variables["changedProjects_pythonSnowpark"], 1))
 
 # Push ECR
   - task: ECRPushImage@1
@@ -111,7 +111,7 @@ steps:
       repositoryName: keboola/$(imageRepository_mlflow)
       pushTag: $(imageTag)
     displayName: Push $(imageRepository_mlflow) to ECR
-    condition: and(eq(variables['isTagBuild'], 'true'), eq(variables["changedProjects_python-310"], 1))
+    condition: and(eq(variables['isTagBuild'], 'true'), eq(variables["changedProjects_python310"], 1))
 
 # Publish the latest tag info
   - script: printf "%s" "$(imageTag)" > base-python-artifact
