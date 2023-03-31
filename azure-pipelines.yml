@@ -38,7 +38,7 @@ steps:
     displayName: Find changes
     name: findChanges
 
-  - script: docker buildx bake --load $(changedProjects)
+  - script: docker buildx bake --load $(findChanges.outputs['changedProjects'])
     displayName: Build Docker images
 
 # Push Quay
