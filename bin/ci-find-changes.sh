@@ -38,4 +38,4 @@ if [[ "${ALL_CHANGES}" == "" ]]; then
   done
 fi
 
-echo "##vso[task.setvariable variable=changedProjects;isOutput=true]$ALL_CHANGES"
+echo "##vso[task.setvariable variable=changedProjects]$ALL_CHANGES"
