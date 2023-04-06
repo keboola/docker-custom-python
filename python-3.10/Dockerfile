@@ -82,6 +82,7 @@ RUN mkdir /home/default \
         pandas \
         patsy \
         plotly \
+        prophet \
         py4j \
         pycodestyle-magic \
         pyfony-bundles \
