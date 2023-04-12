@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 python:3.10.10-buster
+FROM python:3.10.10-buster
 ENV PYTHONIOENCODING utf-8
 
 WORKDIR /home
