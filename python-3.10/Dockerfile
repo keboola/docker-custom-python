@@ -29,10 +29,12 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
 
 ENV PATH $PATH:/opt/mssql-tools/bin
 
-ENV VIRTUAL_ENV /home/default \
-    && mkdir $VIRTUAL_ENV \
-    && chown :users -R /home/default \
-    && chmod a+rwx -R /home/default
+ENV VIRTUAL_ENV /home/default
+
+# prep venv dir
+RUN mkdir $VIRTUAL_ENV \
+    && chown :users -R $VIRTUAL_ENV \
+    && chmod a+rwx -R $VIRTUAL_ENV
 
 # From https://jdk.java.net/13/, stolen from https://github.com/docker-library/openjdk/blob/master/8/jdk/Dockerfile#L22
 ENV JAVA_HOME /usr/local/openjdk
