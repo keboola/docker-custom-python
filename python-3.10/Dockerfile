@@ -29,13 +29,12 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
 
 ENV PATH $PATH:/opt/mssql-tools/bin
 
-# https://pythonspeed.com/articles/activate-virtualenv-dockerfile/
 ENV VIRTUAL_ENV /home/default
 
-# let's stash the path so the we can use it when we want out of the venv
-ENV _OLD_VIRTUAL_PATH "$PATH"
-
-ENV PATH "$VIRTUAL_ENV/bin:$PATH"
+# prep venv dir
+RUN mkdir $VIRTUAL_ENV \
+    && chown :users -R $VIRTUAL_ENV \
+    && chmod a+rwx -R $VIRTUAL_ENV
 
 # From https://jdk.java.net/13/, stolen from https://github.com/docker-library/openjdk/blob/master/8/jdk/Dockerfile#L22
 ENV JAVA_HOME /usr/local/openjdk
@@ -48,8 +47,8 @@ RUN wget https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d8
     && find "$JAVA_HOME/lib" -name '*.so' -exec dirname '{}' ';' | sort -u > /etc/ld.so.conf.d/docker-openjdk.conf \
     && ldconfig
 
-RUN mkdir /home/default \
-	&& python3 -m venv $VIRTUAL_ENV \
+RUN python3 -m venv $VIRTUAL_ENV \
+    && . $VIRTUAL_ENV/bin/activate \
     && python3 -m pip install --upgrade pip \
     && pip3 install --no-cache-dir --upgrade --force-reinstall \
         avro \
@@ -119,10 +118,7 @@ RUN mkdir /home/default \
         wheel \
         xgboost \
         xlrd \
-	&& chown :users -R /home/default \
-	&& chmod a+rwx -R /home/default
-
-RUN pip3 install --no-cache-dir --upgrade --force-reinstall git+https://github.com/keboola/python-docker-application.git@2.2.0 \
+    && pip3 install --no-cache-dir --upgrade --force-reinstall git+https://github.com/keboola/python-docker-application.git@2.2.0 \
     && pip3 install --no-cache-dir --find-links https://h2o-release.s3.amazonaws.com/h2o/latest_stable_Py.html h2o \
     && pip3 install --no-cache-dir --upgrade --force-reinstall \
         git+https://github.com/keboola/sapi-python-client.git@0.4.0 \
@@ -131,14 +127,14 @@ RUN pip3 install --no-cache-dir --upgrade --force-reinstall git+https://github.c
         cryptography\<41 \
         pytz\<2023 \
     && mkdir -p /root/.cache/snowflake/ \
-	&& chown :users -R /home/default \
-	&& chmod a+rwx -R /home/default
+	&& chown :users -R $VIRTUAL_ENV \
+	&& chmod a+rwx -R $VIRTUAL_ENV
 
 # Import matplotlib the first time to build the font cache.
 ENV XDG_CACHE_HOME /tmp/
-RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot"
+RUN . $VIRTUAL_ENV/bin/activate && MPLBACKEND=Agg python -c "import matplotlib.pyplot"
 
-RUN pip3 check
+RUN . $VIRTUAL_ENV/bin/activate && pip3 check
 
 # show me the versions
-RUN pip3 freeze
+RUN . $VIRTUAL_ENV/bin/activate && pip3 freeze
