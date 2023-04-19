@@ -7,22 +7,14 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update && ACCEPT_EULA=Y apt-get install -y --no-install-recommends \
         libgeos-c1v5 \
-        python-numpy \
-        python-scipy \
-        python-matplotlib \
-        ipython \
         msodbcsql17 \
         mssql-tools \
-        python-pandas \
-        python-sympy \
-        python-nose \
         g++ \
         libsasl2-dev \
         libatlas-base-dev \
         libicu-dev \
         gfortran \
         unixodbc-dev \
-        python3-icu \
         wget \
         git \
     && rm -rf /var/lib/apt/lists/*
@@ -87,6 +79,7 @@ RUN python3 -m venv $VIRTUAL_ENV \
         pandas \
         patsy \
         plotly \
+        pipdeptree \
         prophet \
         py4j \
         pycodestyle-magic \
@@ -133,6 +126,8 @@ RUN python3 -m venv $VIRTUAL_ENV \
 # Import matplotlib the first time to build the font cache.
 ENV XDG_CACHE_HOME /tmp/
 RUN . $VIRTUAL_ENV/bin/activate && MPLBACKEND=Agg python -c "import matplotlib.pyplot"
+
+RUN . $VIRTUAL_ENV/bin/activate && pipdeptree -r -p nvid*
 
 RUN . $VIRTUAL_ENV/bin/activate && pip3 check
 
