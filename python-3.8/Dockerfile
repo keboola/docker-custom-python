@@ -118,7 +118,7 @@ RUN . $VIRTUAL_ENV/bin/activate \
     && pip3 install --no-cache-dir --upgrade --force-reinstall \
         git+https://github.com/keboola/sapi-python-client.git@0.4.0 \
         keboola.component \
-        cryptography<41 \
+        cryptography\<41 \
         charset-normalizer\<3 \
         chardet\<4 \
     && mkdir -p /root/.cache/snowflake/ \
