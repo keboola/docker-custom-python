@@ -20,6 +20,6 @@ target "pythonSnowpark" {
   context = "./python-snowpark/"
   tags = ["keboola/docker-custom-python-snowpark"]
   contexts = {
-    python = "target:python-38"
+    python = "target:python38"
   }
 }
