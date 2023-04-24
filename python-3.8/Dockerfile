@@ -25,10 +25,14 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
         python3-icu \
         wget \
         git \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get purge cuda* \
+    && apt-get purge nvidia* \
+    && apt-get autoremove \
+    && apt-get autoclean
 
 ENV PATH $PATH:/opt/mssql-tools/bin
-# https://pythonspeed.com/articles/activate-virtualenv-dockerfile/
+
 ENV VIRTUAL_ENV=/home/default
 
 # From https://jdk.java.net/13/, stolen from https://github.com/docker-library/openjdk/blob/master/8/jdk/Dockerfile#L22

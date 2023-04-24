@@ -7,25 +7,22 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update && ACCEPT_EULA=Y apt-get install -y --no-install-recommends \
         libgeos-c1v5 \
-        python-numpy \
-        python-scipy \
-        python-matplotlib \
-        ipython \
         msodbcsql17 \
         mssql-tools \
-        python-pandas \
-        python-sympy \
-        python-nose \
         g++ \
         libsasl2-dev \
         libatlas-base-dev \
         libicu-dev \
         gfortran \
         unixodbc-dev \
-        python3-icu \
         wget \
         git \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get purge cuda* \
+    && apt-get purge nvidia* \
+    && apt-get autoremove \
+    && apt-get autoclean
+
 
 ENV PATH $PATH:/opt/mssql-tools/bin
 
