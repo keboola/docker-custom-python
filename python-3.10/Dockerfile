@@ -127,7 +127,7 @@ RUN python3 -m venv $VIRTUAL_ENV \
 ENV XDG_CACHE_HOME /tmp/
 RUN . $VIRTUAL_ENV/bin/activate && MPLBACKEND=Agg python -c "import matplotlib.pyplot"
 
-RUN . $VIRTUAL_ENV/bin/activate && pipdeptree -r -p nvidia
+RUN . $VIRTUAL_ENV/bin/activate && pipdeptree -r -p nvid*
 
 RUN . $VIRTUAL_ENV/bin/activate && pip3 check
 
