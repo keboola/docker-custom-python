@@ -25,12 +25,8 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
         python3-icu \
         wget \
         git \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get purge cuda* \
-    && apt-get purge nvidia* \
-    && apt-get autoremove \
-    && apt-get autoclean
-
+    && rm -rf /var/lib/apt/lists/*
+    
 ENV PATH $PATH:/opt/mssql-tools/bin
 
 ENV VIRTUAL_ENV=/home/default
