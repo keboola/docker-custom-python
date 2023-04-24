@@ -105,7 +105,6 @@ RUN python3 -m venv $VIRTUAL_ENV \
         sympy \
         tabulate \
         tomlkit \
-        torch \
         tqdm \
         vincent \
         wheel \
@@ -122,6 +121,8 @@ RUN python3 -m venv $VIRTUAL_ENV \
     && mkdir -p /root/.cache/snowflake/ \
 	&& chown :users -R $VIRTUAL_ENV \
 	&& chmod a+rwx -R $VIRTUAL_ENV
+
+RUN . $VIRTUAL_ENV/bin/activate && pip3 install torch==2.0.0+cpu -f https://download.pytorch.org/whl/torch_stable.html
 
 # Import matplotlib the first time to build the font cache.
 ENV XDG_CACHE_HOME /tmp/
