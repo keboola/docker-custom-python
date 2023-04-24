@@ -17,12 +17,7 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
         unixodbc-dev \
         wget \
         git \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get purge cuda* \
-    && apt-get purge nvidia* \
-    && apt-get autoremove \
-    && apt-get autoclean
-
+    && rm -rf /var/lib/apt/lists/*
 
 ENV PATH $PATH:/opt/mssql-tools/bin
 
@@ -84,6 +79,7 @@ RUN python3 -m venv $VIRTUAL_ENV \
         pandas \
         patsy \
         plotly \
+        pipdeptree \
         prophet \
         py4j \
         pycodestyle-magic \
@@ -130,6 +126,8 @@ RUN python3 -m venv $VIRTUAL_ENV \
 # Import matplotlib the first time to build the font cache.
 ENV XDG_CACHE_HOME /tmp/
 RUN . $VIRTUAL_ENV/bin/activate && MPLBACKEND=Agg python -c "import matplotlib.pyplot"
+
+RUN . $VIRTUAL_ENV/bin/activate && pipdeptree -r -p nvidia
 
 RUN . $VIRTUAL_ENV/bin/activate && pip3 check
 
