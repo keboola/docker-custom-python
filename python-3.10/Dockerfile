@@ -118,17 +118,14 @@ RUN python3 -m venv $VIRTUAL_ENV \
         charset-normalizer\<3 \
         cryptography\<41 \
         pytz\<2023 \
+    && pip3 install torch==2.0.0+cpu -f https://download.pytorch.org/whl/torch_stable.html \
     && mkdir -p /root/.cache/snowflake/ \
 	&& chown :users -R $VIRTUAL_ENV \
 	&& chmod a+rwx -R $VIRTUAL_ENV
 
-RUN . $VIRTUAL_ENV/bin/activate && pip3 install torch==2.0.0+cpu -f https://download.pytorch.org/whl/torch_stable.html
-
 # Import matplotlib the first time to build the font cache.
 ENV XDG_CACHE_HOME /tmp/
 RUN . $VIRTUAL_ENV/bin/activate && MPLBACKEND=Agg python -c "import matplotlib.pyplot"
-
-RUN . $VIRTUAL_ENV/bin/activate && pipdeptree -r -p nvid*
 
 RUN . $VIRTUAL_ENV/bin/activate && pip3 check
 

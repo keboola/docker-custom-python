@@ -26,7 +26,7 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
         wget \
         git \
     && rm -rf /var/lib/apt/lists/*
-    
+
 ENV PATH $PATH:/opt/mssql-tools/bin
 
 ENV VIRTUAL_ENV=/home/default
