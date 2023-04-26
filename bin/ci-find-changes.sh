@@ -20,6 +20,7 @@ for PROJECT in ${@:2}; do
 
   if [[ $PROJECT_CHANGES_COUNT -eq 0 ]]; then
     echo "no changes"
+    echo "##vso[task.setvariable variable=changedProjects_${PROJECT_VAR_NAME}]0"
   else
     echo "has changes"
     echo "##vso[task.setvariable variable=changedProjects_${PROJECT_VAR_NAME}]1"

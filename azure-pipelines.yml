@@ -28,12 +28,6 @@ variables:
     value: docker-python-databricks
   - name: imageRepository_snowpark
     value: docker-python-snowpark
-  - name: changedProjects_python38
-    value: 0
-  - name: changedProjects_python310
-    value: 0
-  - name: changedProjects_pythonSnowpark
-    value: 0
 
 
 steps:
