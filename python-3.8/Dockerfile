@@ -127,9 +127,8 @@ RUN . $VIRTUAL_ENV/bin/activate \
 
 # Import matplotlib the first time to build the font cache.
 ENV XDG_CACHE_HOME /tmp/
-RUN . $VIRTUAL_ENV/bin/activate && MPLBACKEND=Agg python -c "import matplotlib.pyplot"
 
-RUN . $VIRTUAL_ENV/bin/activate && pip3 check
-
-# show me the versions
-RUN . $VIRTUAL_ENV/bin/activate && pip3 freeze
+RUN . $VIRTUAL_ENV/bin/activate \
+    && MPLBACKEND=Agg python -c "import matplotlib.pyplot" \
+    && pip3 check \
+    && pip3 freeze

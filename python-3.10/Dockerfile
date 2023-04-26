@@ -23,11 +23,6 @@ ENV PATH $PATH:/opt/mssql-tools/bin
 
 ENV VIRTUAL_ENV /home/default
 
-# prep venv dir
-RUN mkdir $VIRTUAL_ENV \
-    && chown :users -R $VIRTUAL_ENV \
-    && chmod a+rwx -R $VIRTUAL_ENV
-
 # From https://jdk.java.net/13/, stolen from https://github.com/docker-library/openjdk/blob/master/8/jdk/Dockerfile#L22
 ENV JAVA_HOME /usr/local/openjdk
 
@@ -39,7 +34,8 @@ RUN wget https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d8
     && find "$JAVA_HOME/lib" -name '*.so' -exec dirname '{}' ';' | sort -u > /etc/ld.so.conf.d/docker-openjdk.conf \
     && ldconfig
 
-RUN python3 -m venv $VIRTUAL_ENV \
+RUN mkdir $VIRTUAL_ENV \
+    && python3 -m venv $VIRTUAL_ENV \
     && . $VIRTUAL_ENV/bin/activate \
     && python3 -m pip install --upgrade pip \
     && pip3 install --no-cache-dir --upgrade --force-reinstall \
@@ -124,9 +120,8 @@ RUN python3 -m venv $VIRTUAL_ENV \
 
 # Import matplotlib the first time to build the font cache.
 ENV XDG_CACHE_HOME /tmp/
-RUN . $VIRTUAL_ENV/bin/activate && MPLBACKEND=Agg python -c "import matplotlib.pyplot"
 
-RUN . $VIRTUAL_ENV/bin/activate && pip3 check
-
-# show me the versions
-RUN . $VIRTUAL_ENV/bin/activate && pip3 freeze
+RUN . $VIRTUAL_ENV/bin/activate \
+    && MPLBACKEND=Agg python -c "import matplotlib.pyplot" \
+    && pip3 check \
+    && pip3 freeze
