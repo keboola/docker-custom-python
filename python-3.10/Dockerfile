@@ -80,7 +80,6 @@ RUN python3 -m venv $VIRTUAL_ENV \
         patsy \
         plotly \
         pipdeptree \
-        prophet \
         py4j \
         pycodestyle-magic \
         pyfony-bundles \
