@@ -30,7 +30,7 @@ done
 
 if [[ "${ALL_CHANGES}" == "" ]]; then
   echo ">> No changes detected, triggering all projects builds"
-  for PROJECT in $@; do
+  for PROJECT in ${@:2}; do
     PROJECT_CONFIG=(${PROJECT//:/ })
     PROJECT_VAR_NAME=${PROJECT_CONFIG[0]}
 
