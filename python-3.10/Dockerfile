@@ -47,10 +47,7 @@ RUN mkdir $VIRTUAL_ENV \
         cloudpickle \
         colorama \
         colorlog \
-        console-bundle \
         cython \
-        daipe-core \
-        datalake-bundle \
         deepdiff \
         deprecation \
         dill \
@@ -59,11 +56,7 @@ RUN mkdir $VIRTUAL_ENV \
         future \
         h5py \
         httplib2 \
-        injecta \
         ipython \
-        jupyter-bundle \
-        lineage-bundle \
-        logger-bundle \
         matplotlib \
         mlflow \
         nltk \
@@ -78,12 +71,9 @@ RUN mkdir $VIRTUAL_ENV \
         pipdeptree \
         py4j \
         pycodestyle-magic \
-        pyfony-bundles \
-        pyfony-core \
         pymongo \
         pyodbc \
         pyspark \
-        pyspark-bundle \
         pytest \
 	    python-box \
         python-dotenv \
