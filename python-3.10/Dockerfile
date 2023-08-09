@@ -87,7 +87,7 @@ RUN mkdir $VIRTUAL_ENV \
         pytest \
 	    python-box \
         python-dotenv \
-        PyYaml \
+        'PyYaml==5.3.1' \
         qgrid \
         scikit-image \
         scikit-learn \
