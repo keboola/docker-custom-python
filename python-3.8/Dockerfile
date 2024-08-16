@@ -25,6 +25,8 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
         python3-icu \
         wget \
         git \
+        graphviz \
+        graphviz-dev \
     && rm -rf /var/lib/apt/lists/*
 
 ENV PATH $PATH:/opt/mssql-tools/bin
