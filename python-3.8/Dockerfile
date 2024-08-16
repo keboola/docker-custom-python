@@ -123,6 +123,7 @@ RUN . $VIRTUAL_ENV/bin/activate \
         cryptography\<41 \
         charset-normalizer\<3 \
         chardet\<4 \
+        pyopenssl=23.1.1 \
     && mkdir -p /root/.cache/snowflake/ \
 	&& chown :users -R /home/default \
 	&& chmod a+rwx -R /home/default
