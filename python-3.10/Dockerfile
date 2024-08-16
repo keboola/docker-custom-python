@@ -115,6 +115,7 @@ RUN mkdir $VIRTUAL_ENV \
         charset-normalizer\<3 \
         cryptography\<41 \
         pytz\<2023 \
+        pyopenssl=23.1.1 \
     && pip3 install torch==2.0.0+cpu -f https://download.pytorch.org/whl/torch_stable.html \
     && mkdir -p /root/.cache/snowflake/ \
 	&& chown :users -R $VIRTUAL_ENV \
