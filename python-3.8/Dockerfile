@@ -25,6 +25,7 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
         python3-icu \
         wget \
         git \
+        graphviz \
     && rm -rf /var/lib/apt/lists/*
 
 ENV PATH $PATH:/opt/mssql-tools/bin
@@ -121,6 +122,7 @@ RUN . $VIRTUAL_ENV/bin/activate \
         cryptography\<41 \
         charset-normalizer\<3 \
         chardet\<4 \
+        'pyopenssl==23.1.1' \
     && mkdir -p /root/.cache/snowflake/ \
 	&& chown :users -R /home/default \
 	&& chmod a+rwx -R /home/default
