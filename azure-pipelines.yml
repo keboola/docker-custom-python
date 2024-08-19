@@ -17,7 +17,7 @@ variables:
   - name: imageTag
     value: ${{ replace(variables['Build.SourceBranch'],'refs/tags/','') }}
   - name: azureContainerRegistryConnection
-    value: Keboola ACR
+    value: keboola.azurecr.io
   - name: azureContainerRegistry
     value: keboola.azurecr.io
   - name: imageRepository_base
