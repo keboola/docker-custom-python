@@ -22,8 +22,6 @@ variables:
     value: keboola.azurecr.io
   - name: imageRepository_base
     value: docker-custom-python
-  - name: imageRepository_mlflow
-    value: docker-python-mlflow
   - name: imageRepository_databricks
     value: docker-python-databricks
   - name: imageRepository_snowpark
@@ -80,10 +78,7 @@ steps:
       set -Eeuo pipefail
       docker tag keboola/docker-custom-python:python-3.10 $(azureContainerRegistry)/$(imageRepository_base):python-3.10-$(imageTag)
       docker push $(azureContainerRegistry)/$(imageRepository_base):python-3.10-$(imageTag)
-      
-      docker tag keboola/docker-custom-python:python-3.10 $(azureContainerRegistry)/$(imageRepository_mlflow):$(imageTag)
-      docker push $(azureContainerRegistry)/$(imageRepository_mlflow):$(imageTag)
-      
+
       docker tag keboola/docker-custom-python:python-3.10 $(azureContainerRegistry)/$(imageRepository_databricks):$(imageTag)
       docker push $(azureContainerRegistry)/$(imageRepository_databricks):$(imageTag)
     displayName: Push 3.10 images to ACR
@@ -95,18 +90,6 @@ steps:
       docker push -a $(azureContainerRegistry)/$(imageRepository_snowpark)
     displayName: Push python-snowpark image to ACR
     condition: and(eq(variables['isTagBuild'], 'true'), eq(variables['changedProjects_pythonSnowpark'], 1))
-
-# Push ECR
-  - task: ECRPushImage@1
-    inputs:
-      awsCredentials: Production - ECR Distribution - MLFlow
-      regionName: us-east-1
-      sourceImageName: keboola/docker-custom-python
-      sourceImageTag: python-3.10
-      repositoryName: keboola/$(imageRepository_mlflow)
-      pushTag: $(imageTag)
-    displayName: Push $(imageRepository_mlflow) to ECR
-    condition: and(eq(variables['isTagBuild'], 'true'), eq(variables['changedProjects_python310'], 1))
 
 # Publish the latest tag info
   - script: printf "%s" "$(imageTag)" > base-python-artifact
