@@ -1,0 +1,201 @@
+FROM python:3.8.8 AS builder
+ENV PYTHONIOENCODING utf-8
+
+WORKDIR /home
+
+# Install required system packages for building the application
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+    && curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+    && apt-get update && ACCEPT_EULA=Y apt-get install -y --no-install-recommends \
+        libgeos-c1v5 \
+        python-numpy \
+        python-scipy \
+        python-matplotlib \
+        ipython \
+        msodbcsql17 \
+        mssql-tools \
+        python-pandas \
+        python-sympy \
+        python-nose \
+        g++ \
+        libsasl2-dev \
+        libatlas-base-dev \
+        libicu-dev \
+        gfortran \
+        unixodbc-dev \
+        python3-icu \
+        wget \
+        git \
+        graphviz \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV PATH $PATH:/opt/mssql-tools/bin
+
+ENV VIRTUAL_ENV=/home/default
+
+# From https://jdk.java.net/13/, stolen from https://github.com/docker-library/openjdk/blob/master/8/jdk/Dockerfile#L22
+ENV JAVA_HOME /usr/local/openjdk
+ENV PATH $JAVA_HOME/bin:$PATH
+RUN wget https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz \
+    && mkdir $JAVA_HOME \
+    && tar xv --file openjdk-13*_bin.tar.gz --directory "$JAVA_HOME" --no-same-owner --strip-components 1 \
+    && find "$JAVA_HOME/lib" -name '*.so' -exec dirname '{}' ';' | sort -u > /etc/ld.so.conf.d/docker-openjdk.conf \
+    && ldconfig
+
+# Create Python virtual environment and install packages
+RUN mkdir /home/default \
+    && python3 -m venv $VIRTUAL_ENV \
+    && . $VIRTUAL_ENV/bin/activate \
+    && python3 -m pip install --upgrade pip \
+    && pip3 install --no-cache-dir --upgrade --force-reinstall \
+        avro \
+        azure-storage-blob \
+        beautifulsoup4 \
+        bokeh \
+        boto3 \
+        cloudpickle \
+        colorama \
+        colorlog \
+        console-bundle \
+        cython \
+        daipe-core \
+        datalake-bundle \
+        deepdiff \
+        deprecation \
+        dill \
+        fastavro \
+        flake8 \
+        future \
+        h5py \
+        httplib2 \
+        injecta \
+        ipython \
+        jupyter-bundle \
+        lineage-bundle \
+        logger-bundle \
+        matplotlib \
+        mlflow \
+        nltk \
+        nose \
+        numba \
+        numexpr \
+        numpy \
+        ordered-set \
+        pandas \
+        patsy \
+        plotly \
+        py4j \
+        pycodestyle-magic \
+        pyfony-bundles \
+        pyfony-core \
+        pymongo \
+        pyodbc \
+        pyspark \
+        pyspark-bundle \
+        pytest \
+        python-box \
+        python-dotenv \
+        PyYaml \
+        qgrid \
+        scikit-image \
+        scikit-learn \
+        scipy \
+        seaborn \
+        simpleeval \
+        snowflake-connector-python[pandas] \
+        sqlalchemy\
+        statsmodels \
+        sympy \
+        tabulate \
+        tomlkit \
+        tqdm \
+        vincent \
+        xgboost \
+        xlrd
+
+# Install Keboola specific packages
+RUN . $VIRTUAL_ENV/bin/activate \
+    && pip3 install --no-cache-dir --upgrade --force-reinstall git+https://github.com/keboola/python-docker-application.git@2.2.0 \
+    && pip3 install --no-cache-dir --find-links https://h2o-release.s3.amazonaws.com/h2o/latest_stable_Py.html h2o \
+    && pip3 install --no-cache-dir --upgrade --force-reinstall \
+        git+https://github.com/keboola/sapi-python-client.git@0.4.0 \
+        keboola.component \
+        cryptography\<41 \
+        charset-normalizer\<3 \
+        chardet\<4 \
+        'pyopenssl==23.1.1'
+
+# Import matplotlib the first time to build the font cache
+ENV XDG_CACHE_HOME /tmp/
+RUN . $VIRTUAL_ENV/bin/activate \
+    && MPLBACKEND=Agg python -c "import matplotlib.pyplot" \
+    && pip3 check \
+    && pip3 freeze > /home/requirements.txt
+
+# Second stage: Distroless Python image
+FROM gcr.io/distroless/base-debian12
+
+# Copy Python installation and virtual environment
+COPY --from=builder /usr/local/lib/python3.8 /usr/local/lib/python3.8
+COPY --from=builder /usr/local/bin/python3.8 /usr/local/bin/python3.8
+COPY --from=builder /usr/local/bin/python3 /usr/local/bin/python3
+COPY --from=builder /usr/local/bin/python /usr/local/bin/python
+COPY --from=builder /usr/local/lib/libpython3.8.so* /usr/local/lib/
+COPY --from=builder /home/default /home/default
+
+# Copy core system libraries and their dependencies
+COPY --from=builder \
+    /lib/x86_64-linux-gnu/libz.so* \
+    /lib/x86_64-linux-gnu/libgcc_s.so* \
+    /lib/x86_64-linux-gnu/libbz2.so* \
+    /lib/x86_64-linux-gnu/libm.so* \
+    /lib/x86_64-linux-gnu/libpthread.so* \
+    /lib/x86_64-linux-gnu/libc.so* \
+    /lib/x86_64-linux-gnu/libdl.so* \
+    /lib/x86_64-linux-gnu/libutil.so* \
+    /lib/x86_64-linux-gnu/libcrypt.so* \
+    /lib/x86_64-linux-gnu/
+
+COPY --from=builder \
+    /usr/lib/x86_64-linux-gnu/libz.so \
+    /usr/lib/x86_64-linux-gnu/libbz2.so \
+    /usr/lib/x86_64-linux-gnu/libexpat.so* \
+    /usr/lib/x86_64-linux-gnu/libuuid.so* \
+    /usr/lib/x86_64-linux-gnu/libffi.so* \
+    /usr/lib/x86_64-linux-gnu/
+
+COPY --from=builder /usr/lib/gcc/x86_64-linux-gnu/8/libgcc_s.so* /usr/lib/gcc/x86_64-linux-gnu/8/
+COPY --from=builder /lib64/ld-linux-x86-64.so* /lib64/
+
+# Copy Java JDK (required for PySpark)
+ENV JAVA_HOME /usr/local/openjdk
+ENV PATH $JAVA_HOME/bin:$PATH
+COPY --from=builder /usr/local/openjdk /usr/local/openjdk
+
+# Copy MSSQL and numerical computation libraries
+COPY --from=builder /opt/microsoft /opt/microsoft
+COPY --from=builder /etc/apt/sources.list.d/mssql-release.list /etc/apt/sources.list.d/
+COPY --from=builder \
+    /usr/lib/x86_64-linux-gnu/libsasl* \
+    /usr/lib/x86_64-linux-gnu/libodbc* \
+    /usr/lib/x86_64-linux-gnu/libltdl* \
+    /usr/lib/x86_64-linux-gnu/libgeos* \
+    /usr/lib/x86_64-linux-gnu/libicu* \
+    /usr/lib/x86_64-linux-gnu/libstdc++* \
+    /usr/lib/x86_64-linux-gnu/libgfortran* \
+    /usr/lib/x86_64-linux-gnu/
+
+# Set environment variables
+ENV PYTHONIOENCODING utf-8
+ENV PATH $PATH:/opt/microsoft/mssql-tools/bin
+ENV VIRTUAL_ENV=/home/default
+ENV PATH $VIRTUAL_ENV/bin:$PATH
+ENV XDG_CACHE_HOME /tmp/
+ENV PYTHONPATH=/home/default/lib/python3.8/site-packages:/usr/local/lib/python3.8/site-packages:/usr/local/lib/python3.8
+ENV LD_LIBRARY_PATH=/usr/local/lib:/usr/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu
+
+# Working directory
+WORKDIR /home
+
+# Create a user with a specific UID/GID to be compatible with how Keboola containers typically run
+USER 1001:1001
