@@ -46,6 +46,7 @@ RUN mkdir $VIRTUAL_ENV \
         beautifulsoup4 \
         bokeh \
         boto3 \
+        'cffi<2.0.0' \
         cloudpickle \
         colorama \
         colorlog \
@@ -67,7 +68,7 @@ RUN mkdir $VIRTUAL_ENV \
         lineage-bundle \
         logger-bundle \
         matplotlib \
-        mlflow \
+        'mlflow==2.15.1' \
         nltk \
         nose \
         numba \
@@ -96,7 +97,7 @@ RUN mkdir $VIRTUAL_ENV \
         scipy \
         seaborn \
         simpleeval \
-        snowflake-connector-python[pandas] \
+        'snowflake-connector-python[pandas]==3.12.1' \
         sqlalchemy\
         statsmodels \
         sympy \
@@ -117,6 +118,7 @@ RUN mkdir $VIRTUAL_ENV \
         pytz\<2023 \
         'pyopenssl==23.1.1' \
     && pip3 install torch==2.0.0+cpu -f https://download.pytorch.org/whl/torch_stable.html \
+    && pip3 install --no-cache-dir --force-reinstall 'cffi<2.0.0' \
     && mkdir -p /root/.cache/snowflake/ \
 	&& chown :users -R $VIRTUAL_ENV \
 	&& chmod a+rwx -R $VIRTUAL_ENV
