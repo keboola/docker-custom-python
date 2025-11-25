@@ -3,7 +3,9 @@ ENV PYTHONIOENCODING=utf-8
 
 WORKDIR /home
 
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+RUN echo "deb http://archive.debian.org/debian buster main" > /etc/apt/sources.list \
+    && echo "deb http://archive.debian.org/debian-security buster/updates main" >> /etc/apt/sources.list \
+    && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update && ACCEPT_EULA=Y apt-get install -y --no-install-recommends \
         libgeos-c1v5 \
