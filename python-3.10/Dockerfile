@@ -68,7 +68,7 @@ RUN mkdir $VIRTUAL_ENV \
         lineage-bundle \
         logger-bundle \
         matplotlib \
-        mlflow \
+        'mlflow==2.15.1' \
         nltk \
         nose \
         numba \
@@ -97,7 +97,7 @@ RUN mkdir $VIRTUAL_ENV \
         scipy \
         seaborn \
         simpleeval \
-        snowflake-connector-python[pandas] \
+        'snowflake-connector-python[pandas]==3.12.1' \
         sqlalchemy\
         statsmodels \
         sympy \
@@ -114,6 +114,7 @@ RUN mkdir $VIRTUAL_ENV \
         git+https://github.com/keboola/sapi-python-client.git@0.4.0 \
         keboola.component \
         charset-normalizer\<3 \
+        'cffi<2.0.0' \
         cryptography\<41 \
         pytz\<2023 \
         'pyopenssl==23.1.1' \
