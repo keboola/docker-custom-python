@@ -1,5 +1,5 @@
 FROM python:3.10.10-buster
-ENV PYTHONIOENCODING utf-8
+ENV PYTHONIOENCODING=utf-8
 
 WORKDIR /home
 
@@ -20,14 +20,14 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
         graphviz \
     && rm -rf /var/lib/apt/lists/*
 
-ENV PATH $PATH:/opt/mssql-tools/bin
+ENV PATH=$PATH:/opt/mssql-tools/bin
 
-ENV VIRTUAL_ENV /home/default
+ENV VIRTUAL_ENV=/home/default
 
 # From https://jdk.java.net/13/, stolen from https://github.com/docker-library/openjdk/blob/master/8/jdk/Dockerfile#L22
-ENV JAVA_HOME /usr/local/openjdk
+ENV JAVA_HOME=/usr/local/openjdk
 
-ENV PATH $JAVA_HOME/bin:$PATH
+ENV PATH=$JAVA_HOME/bin:$PATH
 
 RUN wget https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz \
     && mkdir $JAVA_HOME \
@@ -121,7 +121,7 @@ RUN mkdir $VIRTUAL_ENV \
 	&& chmod a+rwx -R $VIRTUAL_ENV
 
 # Import matplotlib the first time to build the font cache.
-ENV XDG_CACHE_HOME /tmp/
+ENV XDG_CACHE_HOME=/tmp/
 
 RUN . $VIRTUAL_ENV/bin/activate \
     && MPLBACKEND=Agg python -c "import matplotlib.pyplot" \
