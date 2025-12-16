@@ -1,17 +1,9 @@
 name: Build and publish
-
-on:
-  push:
-    branches:
-      - '*'
-    tags:
-      - '*'
-  workflow_call:
-  workflow_dispatch:
+on: [ push ]
 
 jobs:
-  build:
-    name: Build Docker images
+  detect-changes:
+    name: Detect changes
     runs-on: ubuntu-latest
     outputs:
       changedProjects_python38: ${{ steps.findChanges.outputs.changedProjects_python38 }}
@@ -23,9 +15,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
       - name: Find changes
         id: findChanges
         run: |
@@ -33,15 +22,38 @@ jobs:
             python38:python-3.8/ \
             python310:python-3.10/
 
-      - name: Build Docker images
+  build:
+    name: Build ${{ matrix.python-version }}
+    needs: detect-changes
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - python-version: "3.8"
+            target: python38
+            changed: ${{ needs.detect-changes.outputs.changedProjects_python38 }}
+          - python-version: "3.10"
+            target: python310
+            changed: ${{ needs.detect-changes.outputs.changedProjects_python310 }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        if: matrix.changed == '1'
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        if: matrix.changed == '1'
+
+      - name: Build Docker image
+        if: matrix.changed == '1'
         run: |
-          echo "Building projects: ${{ steps.findChanges.outputs.changedProjects }}"
-          docker buildx bake --load ${{ steps.findChanges.outputs.changedProjects }}
+          echo "Building ${{ matrix.target }}"
+          docker buildx bake --load ${{ matrix.target }}
 
   publish-images:
     name: Publish images to ACR
     if: startsWith(github.ref, 'refs/tags/')
-    needs: build
+    needs: [detect-changes, build]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -56,11 +68,11 @@ jobs:
 
       - name: Build Docker images
         run: |
-          echo "Building projects: ${{ needs.build.outputs.changedProjects }}"
-          docker buildx bake --load ${{ needs.build.outputs.changedProjects }}
+          echo "Building projects: ${{ needs.detect-changes.outputs.changedProjects }}"
+          docker buildx bake --load ${{ needs.detect-changes.outputs.changedProjects }}
 
       - name: Push python-3.8 image to ACR
-        if: needs.build.outputs.changedProjects_python38 == '1'
+        if: needs.detect-changes.outputs.changedProjects_python38 == '1'
         uses: ./.github/actions/docker-push
         with:
           imageCacheKey: python38
@@ -73,7 +85,7 @@ jobs:
           acrPassword: ${{ secrets.DOCKER_CUSTOM_PYTHON_ACR_PASSWORD }}
 
       - name: Push python-3.10 image to ACR
-        if: needs.build.outputs.changedProjects_python310 == '1'
+        if: needs.detect-changes.outputs.changedProjects_python310 == '1'
         uses: ./.github/actions/docker-push
         with:
           imageCacheKey: python310
