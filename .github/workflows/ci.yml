@@ -49,6 +49,14 @@ jobs:
         run: |
           echo "Building ${{ matrix.target }}"
           docker buildx bake --load ${{ matrix.target }}
+          
+      - name: Upload Docker image artifact
+        uses: actions/upload-artifact@v4
+        if: matrix.changed == '1'
+        with:
+          name: docker-custom-python-${{ matrix.target }}-${{ github.sha }}
+          path: /tmp/editor-service-${{ matrix.target }}.tar
+          retention-days: 1
 
   publish-images:
     name: Publish images to ACR

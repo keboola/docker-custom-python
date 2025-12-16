@@ -30,6 +30,11 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Restore cached Docker image
+      uses: ./.github/actions/docker-image-cache-restore
+      with:
+        key: ${{ inputs.imageCacheKey }}
+
     - name: Authenticate with ACR
       id: authAcr
       uses: ./.github/actions/docker-push/auth-acr

@@ -15,7 +15,7 @@ runs:
     - name: Download Docker image artifact
       uses: actions/download-artifact@v5
       with:
-        name: docker-image-${{ inputs.key }}-${{ inputs.sha }}
+        name: docker-custom-python-${{ inputs.key }}-${{ inputs.sha }}
         path: /tmp
     - name: Load Docker image
       shell: bash
