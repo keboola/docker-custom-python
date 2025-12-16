@@ -114,6 +114,7 @@ RUN mkdir $VIRTUAL_ENV \
     && pip3 install --no-cache-dir --upgrade --force-reinstall \
         git+https://github.com/keboola/sapi-python-client.git@0.4.0 \
         keboola.component \
+        'cffi<2.0.0' \
         charset-normalizer\<3 \
         cryptography\<41 \
         pytz\<2023 \
