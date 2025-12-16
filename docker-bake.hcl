@@ -1,8 +1,7 @@
 group "default" {
   targets = [
     "python38",
-    "python310",
-    "pythonSnowpark"
+    "python310"
   ]
 }
 
@@ -14,12 +13,4 @@ target "python38" {
 target "python310" {
   context = "./python-3.10/"
   tags = ["keboola/docker-custom-python:python-3.10"]
-}
-
-target "pythonSnowpark" {
-  context = "./python-snowpark/"
-  tags = ["keboola/docker-custom-python-snowpark"]
-  contexts = {
-    python = "target:python38"
-  }
 }

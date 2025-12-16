@@ -1,0 +1,50 @@
+name: Push to Registries
+description: Push Docker image to multiple registries
+inputs:
+  imageCacheKey:
+    description: The image cache key
+    required: true
+  sourceImage:
+    description: The source image name
+    required: true
+  sourceTag:
+    description: The source image tag
+    required: true
+    default: latest
+  targetImage:
+    description: The target image name
+    required: true
+  targetTag:
+    description: The target image tag
+    required: true
+  acrRegistry:
+    description: ACR registry URL
+    required: true
+  acrUsername:
+    description: ACR login username
+    required: true
+  acrPassword:
+    description: ACR login password
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Restore cached Docker image
+      uses: ./.github/actions/docker-image-cache-restore
+      with:
+        key: ${{ inputs.imageCacheKey }}
+
+    - name: Authenticate with ACR
+      id: authAcr
+      uses: ./.github/actions/docker-push/auth-acr
+      with:
+        acrRegistry: ${{ inputs.acrRegistry }}
+        acrUsername: ${{ inputs.acrUsername }}
+        acrPassword: ${{ inputs.acrPassword }}
+
+    - name: Push to ACR
+      shell: bash
+      run: |
+        docker tag ${{ inputs.sourceImage }}:${{ inputs.sourceTag }} ${{ steps.authAcr.outputs.repositoryName }}/${{ inputs.targetImage }}:${{ inputs.targetTag }}
+        docker push ${{ steps.authAcr.outputs.repositoryName }}/${{ inputs.targetImage }}:${{ inputs.targetTag }}

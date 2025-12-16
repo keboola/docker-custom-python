@@ -1,0 +1,95 @@
+name: Build and publish
+
+on:
+  push:
+    branches:
+      - '*'
+    tags:
+      - '*'
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Docker images
+    runs-on: ubuntu-latest
+    outputs:
+      changedProjects_python38: ${{ steps.findChanges.outputs.changedProjects_python38 }}
+      changedProjects_python310: ${{ steps.findChanges.outputs.changedProjects_python310 }}
+      changedProjects: ${{ steps.findChanges.outputs.changedProjects }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Find changes
+        id: findChanges
+        run: |
+          ./bin/ci-find-changes.sh master \
+            python38:python-3.8/ \
+            python310:python-3.10/
+        shell: bash
+
+      - name: Build Docker images
+        run: |
+          if [ -z "${{ steps.findChanges.outputs.changedProjects }}" ]; then
+            echo "No changes detected, building all images"
+            docker buildx bake --load python38 python310
+          else
+            echo "Building changed projects: ${{ steps.findChanges.outputs.changedProjects }}"
+            docker buildx bake --load ${{ steps.findChanges.outputs.changedProjects }}
+          fi
+        shell: bash
+
+  publish-images:
+    name: Publish images to ACR
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker images
+        run: |
+          if [ -z "${{ needs.build.outputs.changedProjects }}" ]; then
+            echo "No changes detected, building all images"
+            docker buildx bake --load python38 python310
+          else
+            echo "Building changed projects: ${{ needs.build.outputs.changedProjects }}"
+            docker buildx bake --load ${{ needs.build.outputs.changedProjects }}
+          fi
+        shell: bash
+
+      - name: Push python-3.8 image to ACR
+        if: needs.build.outputs.changedProjects_python38 == '1'
+        uses: ./.github/actions/docker-push
+        with:
+          imageCacheKey: python38
+          sourceImage: keboola/docker-custom-python
+          sourceTag: python-3.8
+          targetImage: docker-custom-python
+          targetTag: python-3.8-${{ github.ref_name }}
+          acrRegistry: keboola.azurecr.io
+          acrUsername: docker-custom-python-push
+          acrPassword: ${{ secrets.DOCKER_CUSTOM_PYTHON_ACR_PASSWORD }}
+
+      - name: Push python-3.10 image to ACR
+        if: needs.build.outputs.changedProjects_python310 == '1'
+        uses: ./.github/actions/docker-push
+        with:
+          imageCacheKey: python310
+          sourceImage: keboola/docker-custom-python
+          sourceTag: python-3.10
+          targetImage: docker-custom-python
+          targetTag: python-3.10-${{ github.ref_name }}
+          acrRegistry: keboola.azurecr.io
+          acrUsername: docker-custom-python-push
+          acrPassword: ${{ secrets.DOCKER_CUSTOM_PYTHON_ACR_PASSWORD }}

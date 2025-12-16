@@ -1,0 +1,22 @@
+name: Restore cached Docker image
+description: Restore cached Docker image
+inputs:
+  key:
+    description: The cache key
+    required: true
+  sha:
+    description: Commit SHA
+    required: true
+    default: ${{ github.sha }}
+
+runs:
+  using: composite
+  steps:
+    - name: Download Docker image artifact
+      uses: actions/download-artifact@v5
+      with:
+        name: docker-image-${{ inputs.key }}-${{ inputs.sha }}
+        path: /tmp
+    - name: Load Docker image
+      shell: bash
+      run: docker load --input /tmp/${{ inputs.key }}.tar

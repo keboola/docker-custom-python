@@ -10,6 +10,12 @@ fi
 TARGET_BRANCH=$1
 ALL_CHANGES=
 
+set_output() {
+    local var_name=$1
+    local value=$2
+    echo "${var_name}=${value}" >> "$GITHUB_OUTPUT"
+}
+
 for PROJECT in ${@:2}; do
   PROJECT_CONFIG=(${PROJECT//:/ })
   PROJECT_VAR_NAME=${PROJECT_CONFIG[0]}
@@ -20,10 +26,10 @@ for PROJECT in ${@:2}; do
 
   if [[ $PROJECT_CHANGES_COUNT -eq 0 ]]; then
     echo "no changes"
-    echo "##vso[task.setvariable variable=changedProjects_${PROJECT_VAR_NAME}]0"
+    set_output "changedProjects_${PROJECT_VAR_NAME}" "0"
   else
     echo "has changes"
-    echo "##vso[task.setvariable variable=changedProjects_${PROJECT_VAR_NAME}]1"
+    set_output "changedProjects_${PROJECT_VAR_NAME}" "1"
     ALL_CHANGES="${ALL_CHANGES} \"${PROJECT_VAR_NAME}\""
   fi
 done
@@ -34,9 +40,9 @@ if [[ "${ALL_CHANGES}" == "" ]]; then
     PROJECT_CONFIG=(${PROJECT//:/ })
     PROJECT_VAR_NAME=${PROJECT_CONFIG[0]}
 
-    echo "##vso[task.setvariable variable=changedProjects_${PROJECT_VAR_NAME}]1"
+    set_output "changedProjects_${PROJECT_VAR_NAME}" "1"
     ALL_CHANGES="${ALL_CHANGES} \"${PROJECT_VAR_NAME}\""
   done
 fi
 
-echo "##vso[task.setvariable variable=changedProjects]$ALL_CHANGES"
+set_output "changedProjects" "$ALL_CHANGES"
