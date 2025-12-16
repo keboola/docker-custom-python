@@ -19,4 +19,4 @@ runs:
         path: /tmp
     - name: Load Docker image
       shell: bash
-      run: docker load --input /tmp/${{ inputs.key }}.tar
+      run: docker load --input /tmp/docker-custom-python-tak to ${{ inputs.key }}.tar

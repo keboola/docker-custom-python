@@ -49,13 +49,14 @@ jobs:
         run: |
           echo "Building ${{ matrix.target }}"
           docker buildx bake --load ${{ matrix.target }}
-          
+          docker save keboola/docker-custom-python:python-${{ matrix.python-version }} -o /tmp/docker-custom-python-${{ matrix.target }}.tar
+
       - name: Upload Docker image artifact
         uses: actions/upload-artifact@v4
         if: matrix.changed == '1'
         with:
           name: docker-custom-python-${{ matrix.target }}-${{ github.sha }}
-          path: /tmp/editor-service-${{ matrix.target }}.tar
+          path: /tmp/docker-custom-python-${{ matrix.target }}.tar
           retention-days: 1
 
   publish-images:
@@ -70,14 +71,6 @@ jobs:
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build Docker images
-        run: |
-          echo "Building projects: ${{ needs.detect-changes.outputs.changedProjects }}"
-          docker buildx bake --load ${{ needs.detect-changes.outputs.changedProjects }}
 
       - name: Push python-3.8 image to ACR
         if: needs.detect-changes.outputs.changedProjects_python38 == '1'
