@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -30,18 +32,11 @@ jobs:
           ./bin/ci-find-changes.sh master \
             python38:python-3.8/ \
             python310:python-3.10/
-        shell: bash
 
       - name: Build Docker images
         run: |
-          if [ -z "${{ steps.findChanges.outputs.changedProjects }}" ]; then
-            echo "No changes detected, building all images"
-            docker buildx bake --load python38 python310
-          else
-            echo "Building changed projects: ${{ steps.findChanges.outputs.changedProjects }}"
-            docker buildx bake --load ${{ steps.findChanges.outputs.changedProjects }}
-          fi
-        shell: bash
+          echo "Building projects: ${{ steps.findChanges.outputs.changedProjects }}"
+          docker buildx bake --load ${{ steps.findChanges.outputs.changedProjects }}
 
   publish-images:
     name: Publish images to ACR
@@ -53,20 +48,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
       - name: Build Docker images
         run: |
-          if [ -z "${{ needs.build.outputs.changedProjects }}" ]; then
-            echo "No changes detected, building all images"
-            docker buildx bake --load python38 python310
-          else
-            echo "Building changed projects: ${{ needs.build.outputs.changedProjects }}"
-            docker buildx bake --load ${{ needs.build.outputs.changedProjects }}
-          fi
-        shell: bash
+          echo "Building projects: ${{ needs.build.outputs.changedProjects }}"
+          docker buildx bake --load ${{ needs.build.outputs.changedProjects }}
 
       - name: Push python-3.8 image to ACR
         if: needs.build.outputs.changedProjects_python38 == '1'

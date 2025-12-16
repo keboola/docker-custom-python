@@ -2,8 +2,8 @@ name: Push to Registries
 description: Push Docker image to multiple registries
 inputs:
   imageCacheKey:
-    description: The image cache key
-    required: true
+    description: The image cache key (unused, kept for compatibility)
+    required: false
   sourceImage:
     description: The source image name
     required: true
@@ -30,11 +30,6 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Restore cached Docker image
-      uses: ./.github/actions/docker-image-cache-restore
-      with:
-        key: ${{ inputs.imageCacheKey }}
-
     - name: Authenticate with ACR
       id: authAcr
       uses: ./.github/actions/docker-push/auth-acr
