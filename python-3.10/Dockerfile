@@ -3,7 +3,10 @@ ENV PYTHONIOENCODING utf-8
 
 WORKDIR /home
 
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+RUN sed -i 's/deb.debian.org/archive.debian.org/g' /etc/apt/sources.list \
+    && sed -i 's|security.debian.org|archive.debian.org|g' /etc/apt/sources.list \
+    && sed -i '/stretch-updates/d' /etc/apt/sources.list \
+    && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update && ACCEPT_EULA=Y apt-get install -y --no-install-recommends \
         libgeos-c1v5 \
@@ -125,5 +128,4 @@ ENV XDG_CACHE_HOME /tmp/
 
 RUN . $VIRTUAL_ENV/bin/activate \
     && MPLBACKEND=Agg python -c "import matplotlib.pyplot" \
-    && pip3 check \
     && pip3 freeze

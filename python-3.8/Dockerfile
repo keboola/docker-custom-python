@@ -1,21 +1,14 @@
-FROM python:3.8.8
+FROM python:3.8-bullseye
 ENV PYTHONIOENCODING utf-8
 
 WORKDIR /home
 
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-    && curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+    && curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update && ACCEPT_EULA=Y apt-get install -y --no-install-recommends \
         libgeos-c1v5 \
-        python-numpy \
-        python-scipy \
-        python-matplotlib \
-        ipython \
         msodbcsql17 \
         mssql-tools \
-        python-pandas \
-        python-sympy \
-        python-nose \
         g++ \
         libsasl2-dev \
         libatlas-base-dev \
