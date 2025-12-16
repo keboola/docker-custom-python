@@ -48,8 +48,10 @@ jobs:
         if: matrix.changed == '1'
         run: |
           echo "Building ${{ matrix.target }}"
-          docker buildx bake --load ${{ matrix.target }}
-          docker save keboola/docker-custom-python:python-${{ matrix.python-version }} -o /tmp/docker-custom-python-${{ matrix.target }}.tar
+          docker buildx build \
+            --tag keboola/docker-custom-python:python-${{ matrix.python-version }} \
+            --output type=docker,dest=/tmp/docker-custom-python-${{ matrix.target }}.tar \
+            ./python-${{ matrix.python-version }}/
 
       - name: Upload Docker image artifact
         uses: actions/upload-artifact@v4
