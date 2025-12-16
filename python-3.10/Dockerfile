@@ -69,7 +69,7 @@ RUN mkdir $VIRTUAL_ENV \
         lineage-bundle \
         logger-bundle \
         matplotlib \
-        mlflow \
+        'mlflow<2.11' \
         nltk \
         nose \
         numba \
@@ -98,7 +98,7 @@ RUN mkdir $VIRTUAL_ENV \
         scipy \
         seaborn \
         simpleeval \
-        snowflake-connector-python[pandas] \
+        'snowflake-connector-python[pandas]<3.7' \
         sqlalchemy\
         statsmodels \
         sympy \
@@ -128,4 +128,5 @@ ENV XDG_CACHE_HOME=/tmp/
 
 RUN . $VIRTUAL_ENV/bin/activate \
     && MPLBACKEND=Agg python -c "import matplotlib.pyplot" \
+    && pip3 check \
     && pip3 freeze
