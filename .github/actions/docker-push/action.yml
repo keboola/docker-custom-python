@@ -2,8 +2,8 @@ name: Push to Registries
 description: Push Docker image to multiple registries
 inputs:
   imageCacheKey:
-    description: The image cache key (unused, kept for compatibility)
-    required: false
+    description: The image cache key (Used to construct artifact name)
+    required: true
   sourceImage:
     description: The source image name
     required: true
