@@ -1,9 +1,12 @@
 FROM python:3.10.10-buster
-ENV PYTHONIOENCODING utf-8
+ENV PYTHONIOENCODING=utf-8
 
 WORKDIR /home
 
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+RUN sed -i 's/deb.debian.org/archive.debian.org/g' /etc/apt/sources.list \
+    && sed -i 's|security.debian.org|archive.debian.org|g' /etc/apt/sources.list \
+    && sed -i '/stretch-updates/d' /etc/apt/sources.list \
+    && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update && ACCEPT_EULA=Y apt-get install -y --no-install-recommends \
         libgeos-c1v5 \
@@ -20,14 +23,14 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
         graphviz \
     && rm -rf /var/lib/apt/lists/*
 
-ENV PATH $PATH:/opt/mssql-tools/bin
+ENV PATH="$PATH:/opt/mssql-tools/bin"
 
-ENV VIRTUAL_ENV /home/default
+ENV VIRTUAL_ENV=/home/default
 
 # From https://jdk.java.net/13/, stolen from https://github.com/docker-library/openjdk/blob/master/8/jdk/Dockerfile#L22
-ENV JAVA_HOME /usr/local/openjdk
+ENV JAVA_HOME=/usr/local/openjdk
 
-ENV PATH $JAVA_HOME/bin:$PATH
+ENV PATH="$JAVA_HOME/bin:$PATH"
 
 RUN wget https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz \
     && mkdir $JAVA_HOME \
@@ -66,7 +69,7 @@ RUN mkdir $VIRTUAL_ENV \
         lineage-bundle \
         logger-bundle \
         matplotlib \
-        mlflow \
+        'mlflow<2.11' \
         nltk \
         nose \
         numba \
@@ -95,7 +98,7 @@ RUN mkdir $VIRTUAL_ENV \
         scipy \
         seaborn \
         simpleeval \
-        snowflake-connector-python[pandas] \
+        'snowflake-connector-python[pandas]<3.7' \
         sqlalchemy\
         statsmodels \
         sympy \
@@ -111,6 +114,7 @@ RUN mkdir $VIRTUAL_ENV \
     && pip3 install --no-cache-dir --upgrade --force-reinstall \
         git+https://github.com/keboola/sapi-python-client.git@0.4.0 \
         keboola.component \
+        'cffi<2.0.0' \
         charset-normalizer\<3 \
         cryptography\<41 \
         pytz\<2023 \
@@ -121,7 +125,7 @@ RUN mkdir $VIRTUAL_ENV \
 	&& chmod a+rwx -R $VIRTUAL_ENV
 
 # Import matplotlib the first time to build the font cache.
-ENV XDG_CACHE_HOME /tmp/
+ENV XDG_CACHE_HOME=/tmp/
 
 RUN . $VIRTUAL_ENV/bin/activate \
     && MPLBACKEND=Agg python -c "import matplotlib.pyplot" \

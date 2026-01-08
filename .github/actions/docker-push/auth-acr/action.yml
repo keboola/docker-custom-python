@@ -1,0 +1,29 @@
+name: Push to ACR
+description: Push Docker image to ACR
+inputs:
+  acrRegistry:
+    description: ACR registry URL
+    required: true
+  acrUsername:
+    description: ACR login username
+    required: true
+  acrPassword:
+    description: ACR login password
+    required: true
+outputs:
+  repositoryName:
+    description: Repository name
+    value: ${{ steps.repositoryName.outputs.repository }}
+
+runs:
+  using: composite
+  steps:
+    - uses: azure/docker-login@v2
+      with:
+        login-server: ${{ inputs.acrRegistry }}
+        username: ${{ inputs.acrUsername }}
+        password: ${{ inputs.acrPassword }}
+
+    - id: repositoryName
+      shell: bash
+      run: echo "repository=${{ inputs.acrRegistry }}" >> $GITHUB_OUTPUT
