@@ -113,7 +113,7 @@ RUN mkdir $VIRTUAL_ENV \
     && pip3 install --no-cache-dir --find-links https://h2o-release.s3.amazonaws.com/h2o/latest_stable_Py.html h2o \
     && pip3 install --no-cache-dir --upgrade --force-reinstall \
         git+https://github.com/keboola/sapi-python-client.git@0.4.0 \
-        keboola.component \
+        'keboola.component<1.9.0' \
         'cffi<2.0.0' \
         charset-normalizer\<3 \
         cryptography\<41 \
